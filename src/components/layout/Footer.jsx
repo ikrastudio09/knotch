@@ -52,7 +52,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about"
+                  href="/Help#about"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   About Us
@@ -84,7 +84,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/Help#contact"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Contact
@@ -101,7 +101,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/shipping"
+                  href="/Help#shipping"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Shipping & Delivery
@@ -117,7 +117,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/size-guide"
+                  href="/Help#care"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Size Guide
@@ -125,7 +125,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/faqs"
+                  href="/Help#faq"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   FAQs
@@ -133,7 +133,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/care"
+                  href="/Help#care"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Care Instructions

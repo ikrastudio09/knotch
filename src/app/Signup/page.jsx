@@ -244,7 +244,7 @@ export default function SignupPage() {
   return (
     <div
       className="min-h-screen bg-white flex items-center justify-center p-6 py-14"
-      style={{ fontFamily: "'Nexa', 'Helvetica Neue', Arial, sans-serif" }}
+      style={{ fontFamily: "'nunito', 'Helvetica Neue', Arial, sans-serif" }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
@@ -346,7 +346,7 @@ export default function SignupPage() {
           color: #fff;
           border: none;
           border-radius: 6px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'nunito', 'Helvetica Neue', Arial, sans-serif;
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.14em;
@@ -368,7 +368,7 @@ export default function SignupPage() {
           background: #fff;
           border: 1.5px solid #000;
           border-radius: 6px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'inter', 'Helvetica Neue', Arial, sans-serif;
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.1em;
@@ -382,7 +382,7 @@ export default function SignupPage() {
         .ka-divider { width: 100%; height: 1px; background: #BFC3C7; }
         .ka-divider-text {
           padding: 0 14px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'nunito', 'Helvetica Neue', Arial, sans-serif;
           font-size: 9px;
           font-weight: 700;
           letter-spacing: 0.18em;
@@ -589,7 +589,7 @@ export default function SignupPage() {
             {error && (
               <div className="ka-error">
                 <p
-                  className="font-nexa"
+                  className="font-inter"
                   style={{
                     fontSize: "12px",
                     fontWeight: 700,
@@ -709,7 +709,7 @@ export default function SignupPage() {
                   </div>
                   {passwordStrength > 0 && (
                     <p
-                      className="font-nexa"
+                      className="font-inter"
                       style={{
                         fontSize: "10px",
                         fontWeight: 300,
@@ -760,7 +760,7 @@ export default function SignupPage() {
               {formData.confirmPassword &&
                 formData.userPassword !== formData.confirmPassword && (
                   <p
-                    className="font-nexa"
+                    className="font-inter"
                     style={{
                       fontSize: "10px",
                       fontWeight: 700,
@@ -906,7 +906,7 @@ export default function SignupPage() {
                 )}
               </button>
               <p
-                className="font-nexa"
+                className="font-nunito"
                 style={{
                   fontSize: "12px",
                   fontWeight: 300,
@@ -917,11 +917,11 @@ export default function SignupPage() {
                 }}
               >
                 I agree to KeptAlive's{" "}
-                <a href="#" className="ka-link" style={{ fontSize: "12px" }}>
+                <a href="/Terms" className="ka-link" style={{ fontSize: "12px" }}>
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#" className="ka-link" style={{ fontSize: "12px" }}>
+                <a href="/Privacy" className="ka-link" style={{ fontSize: "12px" }}>
                   Privacy Policy
                 </a>
               </p>
@@ -975,7 +975,7 @@ export default function SignupPage() {
         {/* Login Link */}
         <div style={{ textAlign: "center", marginTop: "28px" }}>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "13px",
               fontWeight: 300,
@@ -993,7 +993,7 @@ export default function SignupPage() {
         {/* Terms Fine Print */}
         <div style={{ textAlign: "center", marginTop: "18px" }}>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "10px",
               fontWeight: 300,

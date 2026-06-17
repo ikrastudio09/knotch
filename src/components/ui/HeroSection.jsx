@@ -9,6 +9,7 @@ const slides = [
   {
     id: 1,
     image: "/Images/1.jpeg",
+    mobileImage: "/Images/1_m.png",
     title: "New Collection",
     subtitle: "Spring/Summer 2024",
     description: "Discover the latest trends in fashion",
@@ -17,6 +18,7 @@ const slides = [
   },
   {
     id: 2,
+    mobileImage: "/Images/2_m.jpeg",
     image: "/Images/2.jpeg",
     title: "Exclusive Designs",
     subtitle: "Limited Edition",
@@ -26,6 +28,7 @@ const slides = [
   },
   {
     id: 3,
+    mobileImage: "/Images/3_m.png",
     image: "/Images/3.jpeg",
     title: "Timeless Elegance",
     subtitle: "Classic Collection",
@@ -63,16 +66,29 @@ export default function HeroCarousel() {
           href={slide.buttonLink}
           key={slide.id}
           className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none z-0"
+            index === currentSlide
+              ? "opacity-100"
+              : "opacity-0 pointer-events-none z-0"
           }`}
         >
           <div className="absolute inset-0">
+            {/* Desktop Image */}
             <Image
               src={slide.image}
               alt={slide.title}
               fill
               priority={index === 0}
-              className="object-cover"
+              className="object-cover hidden md:block"
+              sizes="100vw"
+            />
+
+            {/* Mobile Image */}
+            <Image
+              src={slide.mobileImage}
+              alt={slide.title}
+              fill
+              priority={index === 0}
+              className="object-cover md:hidden"
               sizes="100vw"
             />
           </div>{" "}

@@ -156,7 +156,7 @@ export default function ProductPage() {
   return (
     <>
       <Navbar />
-      <div className="bg-white md:mt-16 mt-32" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="bg-white md:pt-16 pt-16" style={{ fontFamily: "'Inter', sans-serif" }}>
         <main className="max-w-400 mx-auto">
 
           {/* ── MOBILE / TABLET: Carousel ── */}
@@ -167,7 +167,7 @@ export default function ProductPage() {
                 style={{ transform: `translateX(-${activeSlide * 100}%)` }}
               >
                 {allImages.map((image, index) => (
-                  <div key={index} className="min-w-full h-full shrink-0">
+                  <div key={index} className="basis-full w-full h-full shrink-0">
                     <img
                       src={image.url}
                       alt={`${product.productName} view ${index + 1}`}
@@ -526,7 +526,7 @@ export default function ProductPage() {
           </div>
 
           {/* You May Also Like */}
-          <section className="mt-24 border-t border-[#BFC3C7] pt-16 px-4 sm:px-6 lg:px-8 pb-20">
+          <section className="mt-24 border-t border-[#BFC3C7] pt-16 px-0.5 sm:px-6 lg:px-8 pb-8">
             <div className="flex items-end justify-between mb-10">
               <h2
                 className="text-[clamp(1.4rem,3vw,2.2rem)] font-bold text-black tracking-wide"
@@ -539,7 +539,7 @@ export default function ProductPage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-0.5">
               {relatedProducts.map((item) => (
                 <div
                   key={item._id}

@@ -197,15 +197,8 @@ export default function NewSeasonPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-white pt-16">
-        {/* Page Title */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
-          <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-[0.02em] text-black font-nunito">
-            {type.toLocaleUpperCase()}
-          </h2>
-        </div>
-
-        <div className="pb-16">
+      <div className="min-h-screen bg-white pt-26">
+        <div className="pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Filter Bar */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 py-4 border-t border-b border-[#BFC3C7]">
@@ -385,14 +378,14 @@ export default function NewSeasonPage() {
           </div>
 
           {/* Product Grid */}
-          <div className="w-full px-2.5 sm:px-3.5 lg:px-4.5">
+          <div className="w-full px-0.5 sm:px-3.5 lg:px-4.5">
             <div
-              className={`grid gap-2.5 ${
+              className={`grid gap-0.5 ${
                 selectedView === "2-grid"
-                  ? "grid-cols-1 sm:grid-cols-2"
+                  ? "grid-cols-2"
                   : selectedView === "3-grid"
-                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                    ? "grid-cols-2 lg:grid-cols-3"
+                    : "grid-cols-2 lg:grid-cols-4"
               }`}
             >
               {products.map((product) => (

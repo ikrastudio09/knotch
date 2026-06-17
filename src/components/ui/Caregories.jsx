@@ -1,25 +1,23 @@
 "use client";
 
+import Image from "next/image";
+
 const categories = [
   {
     name: "SHIRTS",
-    image:
-      "/Images/9.png",
+    image: "/Images/9.png",
   },
   {
     name: "TEES",
-    image:
-      "/Images/10.png",
+    image: "/Images/10.png",
   },
   {
     name: "BOTTOMS",
-    image:
-      "/Images/11.png",
+    image: "/Images/11.png",
   },
   {
     name: "WARDROBE",
-    image:
-      "/Images/12.png",
+    image: "/Images/12.png",
   },
   // {
   //   name: "T-SHIRTS",
@@ -36,18 +34,33 @@ const categories = [
 ];
 
 // ── Hero image — swap this for your own brand shot ──────────────────────────
-const HERO_IMAGE =
-  "/Images/4.jpeg";
+const HERO_IMAGE = "/Images/4.jpeg";
+
+const Hero_Image_Mobile = "/Images/4_m.png";
 
 export default function CategorySection() {
   return (
     <section className="w-full bg-white">
       {/* ── Hero Banner — full-bleed image only ── */}
       <div className="relative w-full h-[90vh] min-h-[420px] max-h-[700px] overflow-hidden">
-        <img
+        {/* Desktop */}
+        <Image
           src={HERO_IMAGE}
           alt="New collection"
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          fill
+          priority
+          className="hidden md:block object-cover object-top"
+          sizes="100vw"
+        />
+
+        {/* Mobile */}
+        <Image
+          src={Hero_Image_Mobile}
+          alt="New collection"
+          fill
+          priority
+          className="md:hidden object-cover object-top"
+          sizes="100vw"
         />
       </div>
 

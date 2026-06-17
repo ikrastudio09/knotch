@@ -602,14 +602,14 @@ export default function LoginPage() {
           >
             By continuing, you agree to KeptAlive's{" "}
             <a
-              href="#"
+              href="/Terms"
               style={{ color: "#8A8A8A", textDecoration: "underline" }}
             >
               Terms of Service
             </a>{" "}
             and{" "}
             <a
-              href="#"
+              href="/Privacy"
               style={{ color: "#8A8A8A", textDecoration: "underline" }}
             >
               Privacy Policy

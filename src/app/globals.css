@@ -1,0 +1,74 @@
+/* FONTS MUST COME FIRST */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+/* TAILWIND */
+@import "tailwindcss";
+
+/* ROOT VARIABLES */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* KeptAlive Brand Colors */
+  --ka-black: #000000;
+  --ka-charcoal: #2B2B2B;
+  --ka-grey: #8A8A8A;
+  --ka-light-grey: #BFC3C7;
+
+  /* Fonts */
+  --font-seasons: "Nunito", serif;
+  --font-nexa: "Inter", sans-serif;
+}
+
+/* Tailwind Theme Mapping (Tailwind v4 style) */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-ka-black: var(--ka-black);
+  --color-ka-charcoal: var(--ka-charcoal);
+  --color-ka-grey: var(--ka-grey);
+  --color-ka-light-grey: var(--ka-light-grey);
+
+  --font-sans: var(--font-nexa);
+  --font-display: var(--font-seasons);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+.font-nunito {
+  font-family: "Nunito", sans-serif;
+}
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+/* GLOBAL BODY */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nexa);
+}
+
+/* FONT UTILITIES */
+.font-seasons {
+  font-family: var(--font-seasons);
+}
+
+.font-nexa {
+  font-family: var(--font-nexa);
+}
+
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}

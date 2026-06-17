@@ -23,7 +23,7 @@ export default function KeptaliveCollection() {
     fetchProducts();
   }, []);
   return (
-    <section className="w-full bg-white px-6 py-10 font-sans id=">
+    <section id="new=in" className="w-full bg-white px-6 py-10 font-inter">
       {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border border-gray-200">
         {products.map((product, index) => (

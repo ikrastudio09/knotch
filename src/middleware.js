@@ -12,8 +12,15 @@ export async function middleware(req) {
     const decoded = await verifyToken(token);
     const { pathname } = req.nextUrl;
 
-    if (pathname.startsWith("/admin") && decoded.role !== "admin") {
+    if (pathname.startsWith("/CMS") && decoded.role !== "admin") {
       return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    if (
+      pathname.startsWith("/api/products/admin") &&
+      decoded.role !== "admin"
+    ) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
     return NextResponse.next();
@@ -24,5 +31,11 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/checkout/:path*", "/Profile/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/checkout/:path*",
+    "/Profile/:path*",
+    "/CMS/:path*",
+    "/api/products/admin/:path*",
+  ],
 };

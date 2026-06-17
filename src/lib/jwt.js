@@ -5,8 +5,8 @@ export function signToken(user){
     return jwt.sign(
         {
             id: user._id,
-            role: user.role,
-            email: user.email,
+            role: user.userRole,
+            email: user.userEmail,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }

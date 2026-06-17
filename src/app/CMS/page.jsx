@@ -4,6 +4,8 @@ import CMSlayout   from "@/components/ui/CMSlayout";
 import ProductsPage from "@/components/ui/ProductsPage";
 import CustomerPage from "@/components/ui/CustomerPage";
 import OrdersPage  from "@/components/ui/OrdersPage";
+// import { requireAdmin } from "@/lib/adminAuth";
+// import { redirect } from "next/navigation";
 
 export default function CMSPage() {
   const [page, setPage] = useState("products");

@@ -106,7 +106,7 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen bg-white flex items-center justify-center p-6"
-      style={{ fontFamily: "'Nexa', sans-serif" }}
+      style={{ fontFamily: "'nunito', sans-serif" }}
     >
       {/* Google Fonts + Custom Font Import */}
       <style>{`
@@ -114,15 +114,15 @@ export default function LoginPage() {
         
         * { box-sizing: border-box; }
 
-        .font-seasons { font-family: 'Cormorant Garamond', 'Georgia', serif; }
-        .font-nexa { font-family: 'Nexa', 'Helvetica Neue', 'Arial', sans-serif; }
+        .font-nunito { font-family: 'Nunito', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
 
         .input-field {
           width: 100%;
           padding: 14px 16px 14px 48px;
           border: 1.5px solid #BFC3C7;
           border-radius: 6px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'inter', 'Helvetica Neue', Arial, sans-serif;
           font-size: 14px;
           color: #000;
           background: #fff;
@@ -138,7 +138,7 @@ export default function LoginPage() {
           flex: 1;
           padding: 10px 0;
           border-radius: 4px;
-          font-family: 'Nexa', sans-serif;
+          font-family: 'nunito', sans-serif;
           font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.06em;
@@ -159,7 +159,7 @@ export default function LoginPage() {
           color: #fff;
           border: none;
           border-radius: 6px;
-          font-family: 'Nexa', sans-serif;
+          font-family: 'nunito', sans-serif;
           font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.1em;
@@ -181,7 +181,7 @@ export default function LoginPage() {
           background: #fff;
           border: 1.5px solid #000;
           border-radius: 6px;
-          font-family: 'Nexa', sans-serif;
+          font-family: 'nunito', sans-serif;
           font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.06em;
@@ -195,7 +195,7 @@ export default function LoginPage() {
         .divider-line { width: 100%; height: 1px; background: #BFC3C7; }
         .divider-text {
           padding: 0 14px;
-          font-family: 'Nexa', sans-serif;
+          font-family: 'nunito', sans-serif;
           font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.15em;
@@ -214,7 +214,7 @@ export default function LoginPage() {
 
         .label-text {
           display: block;
-          font-family: 'Nexa', sans-serif;
+          font-family: 'nunito', sans-serif;
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.12em;
@@ -254,7 +254,7 @@ export default function LoginPage() {
             }}
           ></div>
           <h1
-            className="font-seasons"
+            className="font-nunito"
             style={{
               fontSize: "38px",
               fontWeight: 700,
@@ -267,7 +267,7 @@ export default function LoginPage() {
             Welcome Back
           </h1>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "13px",
               fontWeight: 300,
@@ -359,7 +359,7 @@ export default function LoginPage() {
             {error && (
               <div className="error-box">
                 <p
-                  className="font-nexa"
+                  className="font-nunito"
                   style={{
                     fontSize: "12px",
                     fontWeight: 700,
@@ -499,7 +499,7 @@ export default function LoginPage() {
             >
               <a
                 href="/forgot-password"
-                className="font-nexa"
+                className="font-nunito"
                 style={{
                   fontSize: "11px",
                   fontWeight: 700,
@@ -563,7 +563,7 @@ export default function LoginPage() {
         {/* Footer Links */}
         <div style={{ textAlign: "center", marginTop: "28px" }}>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "13px",
               fontWeight: 300,
@@ -574,7 +574,7 @@ export default function LoginPage() {
             Don't have an account?{" "}
             <a
               href="/Signup"
-              className="font-nexa"
+              className="font-inter"
               style={{
                 fontWeight: 700,
                 color: "#000",
@@ -591,7 +591,7 @@ export default function LoginPage() {
         {/* Terms */}
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "10px",
               fontWeight: 300,

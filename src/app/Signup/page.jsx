@@ -251,15 +251,15 @@ export default function SignupPage() {
 
         * { box-sizing: border-box; }
 
-        .font-seasons { font-family: 'Cormorant Garamond', 'Georgia', serif; }
-        .font-nexa { font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif; }
+        .font-nunito { font-family: 'Nunito', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
 
         .ka-input {
           width: 100%;
           padding: 13px 16px 13px 46px;
           border: 1.5px solid #BFC3C7;
           border-radius: 6px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'inter', 'Helvetica Neue', Arial, sans-serif;
           font-size: 14px;
           font-weight: 300;
           color: #000;
@@ -273,7 +273,7 @@ export default function SignupPage() {
           padding: 13px 16px;
           border: 1.5px solid #BFC3C7;
           border-radius: 6px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'inter', 'Helvetica Neue', Arial, sans-serif;
           font-size: 14px;
           font-weight: 300;
           color: #000;
@@ -292,7 +292,7 @@ export default function SignupPage() {
 
         .ka-label {
           display: block;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'nunito', 'Helvetica Neue', Arial, sans-serif;
           font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.13em;
@@ -325,7 +325,7 @@ export default function SignupPage() {
           flex: 1;
           padding: 10px 0;
           border-radius: 4px;
-          font-family: 'Nexa', 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'nunito', 'Helvetica Neue', Arial, sans-serif;
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.1em;
@@ -489,7 +489,7 @@ export default function SignupPage() {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "36px" }}>
           <h1
-            className="font-seasons"
+            className="font-nunito"
             style={{
               fontSize: "36px",
               fontWeight: 700,
@@ -502,7 +502,7 @@ export default function SignupPage() {
             Create Account
           </h1>
           <p
-            className="font-nexa"
+            className="font-inter"
             style={{
               fontSize: "13px",
               fontWeight: 300,

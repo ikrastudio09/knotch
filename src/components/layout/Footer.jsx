@@ -68,7 +68,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/lookbook"
+                  href="/new-in"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   New Arrivals
@@ -76,7 +76,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/Journal"
+                  href="/trending"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   Trending

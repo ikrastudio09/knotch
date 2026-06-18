@@ -5,20 +5,38 @@ import Link from "next/link";
 import {
   Instagram,
   Facebook,
-  Twitter,
   Mail,
   Phone,
   MessageCircle,
 } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Newsletter signup:", email);
-    setEmail("");
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Subscribed Officially!")
+        setEmail("");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong.")
+    }
   };
 
   return (
@@ -68,7 +86,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/new-in"
+                  href="/products/type/new-arrivals"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
                   New Arrivals
@@ -76,10 +94,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/trending"
+                  href="/products/type/sale"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  Trending
+                  Sale
                 </Link>
               </li>
               <li>
@@ -173,7 +191,9 @@ export default function Footer() {
 
             {/* Social Media */}
             <div>
-              <h4 className="text-base font-semibold mb-3 font-nunito">Connect</h4>
+              <h4 className="text-base font-semibold mb-3 font-nunito">
+                Connect
+              </h4>
               <div className="flex flex-wrap gap-3 mb-4">
                 <Link
                   href="https://instagram.com/knotch.co"
@@ -267,15 +287,15 @@ export default function Footer() {
 
             {/* Right - Developer Credit */}
             <p className="text-center md:text-right font-inter">
-              Managed by {" "}
+              Managed by{" "}
               <Link
                 href="https://www.ikrastudio.in/"
                 target="_blank"
                 className="text-white hover:underline"
               >
                 iKRA Studio
-              </Link> {" "}
-              and 
+              </Link>{" "}
+              and
               <Link
                 href="https://www.rexory.in/"
                 target="_blank"

@@ -158,7 +158,7 @@ export default function NewSeasonPage() {
   // Filter states
   const [filters, setFilters] = useState({
     categories: [],
-    priceRange: [0, 50000],
+    priceRange: [0, 2000],
     size: [],
   });
 
@@ -319,7 +319,7 @@ export default function NewSeasonPage() {
                     <input
                       type="range"
                       min="0"
-                      max="50000"
+                      max="2000"
                       value={filters.priceRange[1]}
                       className="w-full accent-black mb-2"
                       onChange={(e) =>
@@ -364,7 +364,7 @@ export default function NewSeasonPage() {
                     onClick={() =>
                       setFilters({
                         categories: [],
-                        priceRange: [0, 50000],
+                        priceRange: [0, 2000],
                         size: [],
                       })
                     }

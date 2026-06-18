@@ -3,12 +3,14 @@ import { useState } from "react";
 import {
   LayoutDashboard, Package, Users, ShoppingBag,
   Bell, ChevronRight,
+  Mail,
 } from "lucide-react";
 
 const NAV = [
   { id: "products",  label: "Products",  icon: Package },
   { id: "customers", label: "Customers", icon: Users },
   { id: "orders",    label: "Orders",    icon: ShoppingBag },
+  { id: "subscribers",    label: "Subscribers",    icon: Mail },
 ];
 
 export default function CMSLayout({ page, setPage, children }) {

@@ -109,6 +109,7 @@ function Input({ value, onChange, ...props }) {
 function ProductModal({ product, categories, onClose, onSave }) {
   const isEdit = !!product;
   const [previewImages, setPreviewImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   const [form, setForm] = useState({
     productName: "",
@@ -143,9 +144,52 @@ function ProductModal({ product, categories, onClose, onSave }) {
         images: [],
       });
     }
+
+    if (product?.productImages) {
+      setExistingImages(product.productImages);
+    }
   }, [product]);
 
+  const moveExistingLeft = (index) => {
+    if (index === 0) return;
+
+    const arr = [...existingImages];
+
+    [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
+
+    setExistingImages(arr);
+  };
+
+  const moveExistingRight = (index) => {
+    if (index === existingImages.length - 1) return;
+
+    const arr = [...existingImages];
+
+    [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+
+    setExistingImages(arr);
+  };
+
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+  const moveLeft = (index) => {
+    if (index === 0) return;
+
+    const arr = [...previewImages];
+
+    [arr[index - 1], arr[index]] = [arr[index], arr[index - 1]];
+
+    setPreviewImages(arr);
+  };
+
+  const moveRight = (index) => {
+    if (index === previewImages.length - 1) return;
+
+    const arr = [...previewImages];
+
+    [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+
+    setPreviewImages(arr);
+  };
 
   const Field = ({ label, children, hint }) => (
     <div>
@@ -322,14 +366,12 @@ function ProductModal({ product, categories, onClose, onSave }) {
                 onChange={(e) => {
                   const files = Array.from(e.target.files);
 
-                  set("images", files);
-
                   const previews = files.map((file) => ({
                     file,
                     url: URL.createObjectURL(file),
                   }));
 
-                  setPreviewImages(previews);
+                  setPreviewImages((prev) => [...prev, ...previews]);
                 }}
               />
 
@@ -347,20 +389,75 @@ function ProductModal({ product, categories, onClose, onSave }) {
                 </p>
               </div>
             </div>
-            {isEdit && product.productImages?.length > 0 && (
-              <div className="flex gap-3 flex-wrap">
-                {product.productImages.map((img, i) => (
-                  <div
-                    key={i}
-                    className="relative w-20 h-20 border border-[#BFC3C7] overflow-hidden group cursor-pointer"
-                  >
+            {previewImages.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                {previewImages.map((img, index) => (
+                  <div key={index} className="border p-2">
                     <img
                       src={img.url}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-24 h-24 object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <X size={16} className="text-white" />
+
+                    {index === 0 && (
+                      <div className="bg-black text-white text-[10px] text-center py-1 mt-1">
+                        THUMBNAIL
+                      </div>
+                    )}
+
+                    <div className="flex justify-center gap-2 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => moveExistingLeft(index)}
+                        disabled={index === 0}
+                        className="border px-2 py-1 text-black hover:bg-black hover:text-white disabled:opacity-30"
+                      >
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => moveExistingRight(index)}
+                        disabled={index === existingImages.length - 1}
+                        className="border-black px-2 py-1 text-black hover:bg-black hover:text-white disabled:opacity-30"
+                      >
+                        →
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {isEdit && existingImages.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                {existingImages.map((img, index) => (
+                  <div key={img.public_id} className="border p-2">
+                    <img src={img.url} className="w-24 h-24 object-cover" />
+
+                    {index === 0 && (
+                      <div className="bg-black text-white text-xs text-center mt-1">
+                        THUMBNAIL
+                      </div>
+                    )}
+
+                    <div className="flex justify-center gap-2 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => moveExistingLeft(index)}
+                        disabled={index === 0}
+                        className="border border-black px-2 py-1 text-black hover:bg-black hover:text-white disabled:opacity-30"
+                      >
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => moveExistingRight(index)}
+                        disabled={index === existingImages.length - 1}
+                        className="border border-black px-2 py-1 text-black hover:bg-black hover:text-white disabled:opacity-30"
+                      >
+                        →
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -408,7 +505,13 @@ function ProductModal({ product, categories, onClose, onSave }) {
             Cancel
           </button>
           <button
-            onClick={() => onSave(form)}
+            onClick={() =>
+              onSave({
+                ...form,
+                images: previewImages.map((img) => img.file),
+                existingImages,
+              })
+            }
             className="px-8 py-3 text-xs tracking-widest uppercase bg-black text-white hover:bg-[#2B2B2B] transition-colors font-medium"
           >
             {isEdit ? "Save Changes" : "Add Product"}
@@ -582,7 +685,17 @@ export default function ProductsPage() {
         });
 
         formData.append("productStock", JSON.stringify(stockObj));
-        console.log(formData);
+
+        formData.append(
+          "productImagesOrder",
+          JSON.stringify(form.existingImages),
+        );
+
+        if (form.images && form.images.length > 0) {
+          for (const file of form.images) {
+            formData.append("images", file);
+          }
+        }
 
         const res = await fetch(
           `/api/products/admin/update/${productModal._id}`,

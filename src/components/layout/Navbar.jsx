@@ -63,8 +63,8 @@ export default function Header() {
       await fetch("/api/auth/logout", { method: "POST" });
       setIsLoggedIn(false);
       toast.success("Logged out successfully");
-      setCartCount(0);
-      setWishlistCount(0);
+      // setCartCount(0);
+      // setWishlistCount(0);
       router.push("/Login");
     } catch (error) {
       console.error("Logout failed:", error);

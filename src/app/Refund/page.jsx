@@ -21,9 +21,6 @@ import {
     UserRound,
 } from "lucide-react";
 
-// Headings use Nunito, body copy uses Inter — loaded via next/font and
-// exposed as CSS variables so they can be applied with Tailwind's
-// arbitrary-value font utilities below.
 const nunito = Nunito({
     subsets: ["latin"],
     weight: ["400", "600", "700", "800"],

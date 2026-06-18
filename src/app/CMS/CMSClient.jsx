@@ -17,6 +17,8 @@ export default function CMSClient() {
         return <CustomerPage />;
       case "orders":
         return <OrdersPage />;
+      case "subscribers":
+        return <SubscriberPage />;
       default:
         return <ProductsPage />;
     }

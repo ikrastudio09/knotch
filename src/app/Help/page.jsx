@@ -14,18 +14,19 @@ const tabs = [
 ];
 
 // ─── About Us ───────────────────────────────────────────────────────────────
+
 function AboutSection() {
   return (
     <div id="about">
       <h1 className="font-nunito text-4xl md:text-5xl mb-2">About Us</h1>
       <p className="font-inter text-sm text-[#8A8A8A] mb-8">
-        Why keptalive makes one of everything, and never again.
+        Modern essentials designed for everyday confidence.
       </p>
 
       <div className="mb-10">
         <img
-          src="https://images.unsplash.com/photo-1751903051548-9fa34fbcfd89?fm=jpg&q=80&w=1600&auto=format&fit=crop"
-          alt="Garments hanging on a rack"
+          src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?fm=jpg&q=80&w=1600&auto=format&fit=crop"
+          alt="Knotch clothing"
           className="w-full h-64 md:h-96 object-cover grayscale"
         />
       </div>
@@ -34,21 +35,20 @@ function AboutSection() {
 
       <div className="space-y-6 max-w-2xl mb-10">
         <p className="font-inter font-light text-sm text-[#2B2B2B] leading-relaxed">
-          keptalive started with a simple frustration: too many clothes, made
-          too fast, kept by no one. We wanted to make the opposite — fewer
-          pieces, made once, kept for good.
+          Knotch was created with a simple vision — to make clothing that feels
+          timeless, refined, and effortless to wear.
         </p>
+
         <p className="font-inter font-light text-sm text-[#2B2B2B] leading-relaxed">
-          Every collection we release is finite. Each piece is numbered at the
-          moment it's made, recorded on a certificate of authenticity, and sewn
-          into the garment itself. When a collection closes, it closes for good
-          — no reprints, no restocks, no second batch.
+          We focus on clean silhouettes, quality fabrics, and thoughtful
+          detailing to create pieces that move seamlessly between everyday wear
+          and elevated occasions.
         </p>
+
         <p className="font-inter font-light text-sm text-[#2B2B2B] leading-relaxed">
-          We're a small team. We design, produce, and pack every piece
-          ourselves, which is part of why we can promise that what you receive
-          is exactly what we said it would be — numbered, limited, and
-          permanent.
+          Every garment is designed with comfort and versatility in mind,
+          ensuring you feel confident whether you're dressing for work, casual
+          outings, or special moments.
         </p>
       </div>
 
@@ -56,12 +56,12 @@ function AboutSection() {
 
       <div className="grid grid-cols-3 gap-px bg-[#BFC3C7] mb-10">
         {[
-          ["150", "Pieces per collection"],
-          ["1", "Made once, ever"],
-          ["0", "Restocks"],
+          ["Premium", "Fabrics"],
+          ["Modern", "Fits"],
+          ["Timeless", "Design"],
         ].map(([num, label], i) => (
           <div key={i} className="bg-white px-4 py-6 text-center">
-            <p className="font-nunito text-3xl mb-1">{num}</p>
+            <p className="font-nunito text-2xl md:text-3xl mb-1">{num}</p>
             <p className="font-inter text-xs text-[#8A8A8A] uppercase tracking-widest">
               {label}
             </p>
@@ -74,9 +74,9 @@ function AboutSection() {
       <p className="font-nunito text-xl mb-4">What we believe</p>
       <ul className="space-y-3 mb-10">
         {[
-          "Scarcity should be honest — once it's gone, it's actually gone",
-          "A number on a garment is a promise, not a marketing gimmick",
-          "Fewer, better pieces beat constant new drops",
+          "Good style begins with well-made essentials",
+          "Comfort should never compromise sophistication",
+          "Quality over excess, always",
         ].map((item, i) => (
           <li key={i} className="flex items-start gap-3">
             <span className="w-3 h-3 bg-black flex-shrink-0 mt-0.5" />
@@ -88,9 +88,8 @@ function AboutSection() {
       <div className="bg-[#F5F5F3] border border-[#BFC3C7] px-6 py-5">
         <p className="font-inter text-sm mb-1">A note from the team.</p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          keptalive is small on purpose. Every piece, every number, every
-          certificate is decided by a small team who believe in fewer things,
-          made well, and kept.
+          Knotch is built by a small team passionate about creating elevated
+          wardrobe staples that are made to be worn, loved, and lived in.
         </p>
       </div>
     </div>
@@ -100,36 +99,36 @@ function AboutSection() {
 // ─── FAQ ────────────────────────────────────────────────────────────────────
 const faqItems = [
   {
-    q: "How are pieces numbered?",
-    a: "Each piece in our collection is assigned a unique number at the time of production. This number is printed on your certificate of authenticity and sewn into the garment. No two pieces share the same number.",
+    q: "How do I choose the right size?",
+    a: "Each product page includes detailed measurements in our size chart. We recommend comparing them with a garment you already own for the best fit. If you're between sizes, size up for a more relaxed fit.",
   },
   {
-    q: "Are the pieces limited?",
-    a: "Yes. Every piece is made once and never restocked. When an collection closes, those pieces are permanently unavailable. This is intentional — scarcity is part of the collection's value.",
+    q: "Do you restock sold out products?",
+    a: "Some styles may be restocked based on demand, while limited drops may not return. If a product is sold out, keep an eye on our website or follow us for restock updates.",
   },
   {
-    q: "Can I return a piece?",
-    a: "We do not accept returns for change of mind. Each piece is a permanent record. Returns are accepted only if the piece arrives damaged, defective, or is not the piece you ordered. Contact us within 48 hours of delivery.",
+    q: "Can I exchange or return my order?",
+    a: "We accept exchanges for size issues and returns only for damaged, defective, or incorrect items. The product must be unused, with tags intact, and reported within the eligible return window after delivery.",
   },
   {
-    q: "Will sold out pieces be restocked?",
-    a: "No. Once a piece sells out, it is gone. This is by design — keptalive does not restock, reproduce, or reissue any piece from any collection.",
+    q: "How long will my order take to arrive?",
+    a: "Orders are usually processed within 1–3 business days. Domestic delivery typically takes 3–7 business days depending on your location.",
   },
   {
-    q: "When will collection II be available?",
-    a: "collection II is currently in development. We do not have an exact date yet. Follow us or sign up to be notified when it opens.",
+    q: "Can I cancel my order after placing it?",
+    a: "Orders can only be cancelled before they are shipped. Once dispatched, cancellations are not possible. Contact our support team as soon as possible if you need assistance.",
   },
   {
-    q: "What comes with my order?",
-    a: "Every order includes the piece, a numbered certificate of authenticity, and our standard packaging. The certificate is the permanent record of your piece and its collection number — keep it safe.",
+    q: "How can I track my order?",
+    a: "Once your order is shipped, you will receive a tracking link via email or SMS. You can use it to monitor your shipment in real time.",
   },
   {
-    q: "Do you ship internationally?",
-    a: "Yes. International shipping is available and calculated at checkout. Delivery takes 7–14 business days. International orders are subject to local customs and import duties, which are the responsibility of the buyer.",
+    q: "What if I receive a damaged product?",
+    a: "If your order arrives damaged, defective, or incorrect, please contact us within 48 hours of delivery. An unedited, unpaused, continuous video of the complete unboxing—from opening the sealed package to fully showing the product—is mandatory for any damage or missing item claim. Claims submitted without a valid unboxing video may not be accepted. Please also share clear photos of the product and packaging so our team can assist you with a replacement or resolution.",
   },
   {
-    q: "How do I know my size?",
-    a: "Refer to our Sizing Guide in the Help section. Each product page also includes specific measurements for that piece. When in doubt, contact us at hello@keptalive.com.",
+    q: "How should I care for my garments?",
+    a: "Care instructions are mentioned on each product label. For best longevity, we recommend gentle washing, avoiding harsh detergents, and storing garments properly.",
   },
 ];
 
@@ -184,13 +183,13 @@ function ContactSection() {
             General enquiries
           </p>
           <a
-            href="mailto:hello@keptalive.com"
+            href="mailto:knotch99@gmail.com"
             className="font-nunito text-2xl md:text-3xl border-b border-black pb-1 inline-block"
           >
-            hello@keptalive.com
+            knotch99@gmail.com
           </a>
           <p className="font-inter font-light text-sm text-[#2B2B2B] mt-2">
-            For questions about orders, pieces, or anything else.
+            For orders, support, or general questions.
           </p>
         </div>
 
@@ -198,16 +197,16 @@ function ContactSection() {
 
         <div>
           <p className="font-inter text-xs text-[#8A8A8A] uppercase tracking-widest mb-2">
-            Press &amp; editorial
+            Call &amp; Whatsapp
           </p>
           <a
-            href="mailto:press@keptalive.com"
+            href="https://wa.me/8983985787"
             className="font-nunito text-2xl md:text-3xl border-b border-black pb-1 inline-block"
           >
-            press@keptalive.com
+            +91 89839 85787
           </a>
           <p className="font-inter font-light text-sm text-[#2B2B2B] mt-2">
-            For media requests, editorial features, and collaborations.
+            Available Monday to Saturday, 10 AM – 7 PM.
           </p>
         </div>
 
@@ -215,16 +214,16 @@ function ContactSection() {
 
         <div>
           <p className="font-inter text-xs text-[#8A8A8A] uppercase tracking-widest mb-2">
-            Stockist &amp; trade
+            Instagram 
           </p>
           <a
-            href="mailto:trade@keptalive.com"
+            href="https://instagram.com/knotch.co"
             className="font-nunito text-2xl md:text-3xl border-b border-black pb-1 inline-block"
           >
-            trade@keptalive.com
+            knotch.co
           </a>
           <p className="font-inter font-light text-sm text-[#2B2B2B] mt-2">
-            For wholesale, stockist, or trade enquiries.
+            DM us for quick updates and assistance.
           </p>
         </div>
       </div>
@@ -236,7 +235,7 @@ function ContactSection() {
           We respond within 2 business days.
         </p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          keptalive is a small label. There is a real person on the other end of
+          knotch is a small label. There is a real person on the other end of
           every email.
         </p>
       </div>
@@ -245,6 +244,7 @@ function ContactSection() {
 }
 
 // ─── Shipping & Returns ───────────────────────────────────────────────────────
+
 function ShippingSection() {
   return (
     <div id="shipping">
@@ -252,7 +252,7 @@ function ShippingSection() {
         Shipping &amp; Returns
       </h1>
       <p className="font-inter text-sm text-[#8A8A8A] mb-8">
-        Everything you need to know before and after your order.
+        Everything you need to know about delivery, exchanges, and returns.
       </p>
 
       {/* Shipping */}
@@ -260,16 +260,17 @@ function ShippingSection() {
         Shipping
       </p>
       <hr className="border-[#2B2B2B] mb-0" />
+
       <table className="w-full font-inter text-sm">
         <tbody>
           {[
-            ["Standard delivery", "5–7 business days · ₹ 299"],
-            ["Express delivery", "2–3 business days · ₹ 599"],
-            ["International", "7–14 business days · Calculated at checkout"],
-            ["Free shipping", "On all orders over ₹ 5,000"],
+            ["Order processing", "1–3 business days"],
+            ["Standard delivery", "3–7 business days"],
+            ["Express delivery", "1–3 business days (where available)"],
+            ["Shipping charges", "Calculated at checkout"],
           ].map(([label, value], i) => (
             <tr key={i} className="border-b border-[#BFC3C7]">
-              <td className="py-4 pr-4 font-inter">{label}</td>
+              <td className="py-4 pr-4">{label}</td>
               <td className="py-4 text-[#2B2B2B] font-light">{value}</td>
             </tr>
           ))}
@@ -278,38 +279,39 @@ function ShippingSection() {
 
       <div className="bg-[#F5F5F3] border border-[#BFC3C7] px-6 py-5 mt-4 mb-10">
         <p className="font-inter text-sm mb-1">
-          Orders are dispatched within 2–3 business days.
+          Orders are dispatched after successful confirmation and payment.
         </p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          You will receive a tracking number once your order has been shipped.
+          Tracking details will be shared once your order has been shipped.
         </p>
       </div>
 
       {/* Returns */}
       <hr className="border-[#2B2B2B] mb-6" />
       <p className="font-inter text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
-        Returns
+        Returns & Exchanges
       </p>
 
       <p className="font-inter text-sm mb-3">
-        Because each piece is numbered and final, we have a strict returns
-        policy.
+        We do not accept returns for change of mind.
       </p>
       <p className="font-inter font-light text-sm text-[#2B2B2B] mb-8">
-        We do not accept returns for change of mind. Each piece is a permanent
-        record — once it leaves our hands and enters yours, it is yours.
+        Exchanges are accepted only for size issues or if the product arrives
+        damaged, defective, or incorrect. Items must be unused and returned with
+        original tags and packaging intact.
       </p>
 
       <hr className="border-[#BFC3C7] mb-6" />
 
       <p className="font-inter text-xs uppercase tracking-widest text-[#8A8A8A] mb-4">
-        We will accept a return if:
+        We accept claims if:
       </p>
+
       <ul className="space-y-3 mb-6">
         {[
-          "The piece arrives damaged or defective",
-          "You received the wrong piece",
-          "The piece does not match its description",
+          "The product arrives damaged or defective",
+          "You received the wrong item",
+          "There is a genuine size issue (subject to availability)",
         ].map((item, i) => (
           <li key={i} className="flex items-start gap-3">
             <span className="w-3 h-3 bg-black flex-shrink-0 mt-0.5" />
@@ -319,31 +321,31 @@ function ShippingSection() {
       </ul>
 
       <p className="font-inter font-light text-sm text-[#2B2B2B] mb-8">
-        Contact us within 48 hours of delivery with your order number and
-        photos.
+        Claims must be raised within 48 hours of delivery.
       </p>
 
       <hr className="border-[#BFC3C7] mb-6" />
 
       <div className="bg-[#F5F5F3] border border-[#BFC3C7] px-6 py-5 mb-8">
         <p className="font-inter text-sm mb-1">
-          Your certificate of authenticity.
+          Important for damage claims
         </p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          Every piece comes with a numbered certificate. Keep it safe — it is
-          the permanent record of your piece and its collection number.
+          An unedited, unpaused continuous unboxing video from opening the sealed
+          package to showing the product is mandatory for damaged, missing, or
+          incorrect item claims.
         </p>
       </div>
 
       <hr className="border-[#BFC3C7] mb-6" />
 
       <p className="font-inter text-sm">
-        To initiate a return:{" "}
+        For support:{" "}
         <a
-          href="mailto:hello@keptalive.com"
+          href="mailto:knotch99@gmail.com"
           className="border-b border-black pb-0.5"
         >
-          hello@keptalive.com
+          knotch99@gmail.com
         </a>
       </p>
     </div>
@@ -351,28 +353,30 @@ function ShippingSection() {
 }
 
 // ─── Care Guide ───────────────────────────────────────────────────────────────
+
 function CareGuideSection() {
   return (
     <div id="care">
       <h1 className="font-nunito text-4xl md:text-5xl mb-2">Care Guide</h1>
       <p className="font-inter text-sm text-[#8A8A8A] mb-8">
-        How to keep your piece in its original condition for years.
+        Simple care instructions to help your garments last longer.
       </p>
 
       <p className="font-inter text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
-        Washing
+        Wash & Care
       </p>
       <hr className="border-[#2B2B2B] mb-0" />
+
       <table className="w-full font-inter text-sm">
         <tbody>
           {[
-            ["Wash", "Cold, gentle cycle · inside out"],
-            ["Detergent", "Mild, no bleach or fabric softener"],
-            ["Drying", "Lay flat to dry · avoid direct sun"],
-            ["Ironing", "Low heat · steam only, no direct contact"],
+            ["Wash", "Machine wash cold with similar colours"],
+            ["Bleach", "Do not bleach"],
+            ["Drying", "Tumble dry low or line dry in shade"],
+            ["Ironing", "Iron on low heat inside out"],
           ].map(([label, value], i) => (
             <tr key={i} className="border-b border-[#BFC3C7]">
-              <td className="py-4 pr-4 font-inter">{label}</td>
+              <td className="py-4 pr-4">{label}</td>
               <td className="py-4 text-[#2B2B2B] font-light">{value}</td>
             </tr>
           ))}
@@ -380,22 +384,26 @@ function CareGuideSection() {
       </table>
 
       <div className="bg-[#F5F5F3] border border-[#BFC3C7] px-6 py-5 mt-4 mb-10">
-        <p className="font-inter text-sm mb-1">Every piece is made once.</p>
+        <p className="font-inter text-sm mb-1">
+          Care for your clothes, and they’ll care for your style.
+        </p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          There is no reprint. Treat it accordingly.
+          Proper washing and storage help preserve fit, colour, and fabric quality.
         </p>
       </div>
 
       <hr className="border-[#2B2B2B] mb-6" />
+
       <p className="font-inter text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
         Storage
       </p>
+
       <ul className="space-y-3 mb-8">
         {[
-          "Store on a wide hanger to keep the shoulder shape",
+          "Store on hangers to maintain garment shape",
           "Keep away from direct sunlight to prevent fading",
-          "Use breathable garment bags, not plastic",
-          "Avoid folding for long periods — creases can set permanently",
+          "Store in a cool, dry place",
+          "Avoid overcrowding in wardrobes to prevent wrinkles",
         ].map((item, i) => (
           <li key={i} className="flex items-start gap-3">
             <span className="w-3 h-3 bg-black flex-shrink-0 mt-0.5" />
@@ -407,32 +415,31 @@ function CareGuideSection() {
       <hr className="border-[#BFC3C7] mb-6" />
 
       <p className="font-inter text-xs uppercase tracking-widest text-[#8A8A8A] mb-4">
-        Repairs &amp; alterations
+        Stains & Spills
       </p>
       <p className="font-inter font-light text-sm text-[#2B2B2B] mb-8">
-        For minor repairs, we recommend a trusted local tailor. For anything
-        affecting the piece's numbered authenticity, contact us first.
+        Blot gently — do not rub. Treat stains as soon as possible and avoid
+        harsh chemicals that may damage fabric or colour.
       </p>
 
       <hr className="border-[#BFC3C7] mb-6" />
 
       <div className="bg-[#F5F5F3] border border-[#BFC3C7] px-6 py-5 mb-8">
-        <p className="font-inter text-sm mb-1">Stains and spills.</p>
+        <p className="font-inter text-sm mb-1">Still unsure?</p>
         <p className="font-inter font-light text-sm text-[#8A8A8A]">
-          Blot, don't rub. Treat fresh stains as soon as possible and avoid
-          harsh spot removers on delicate fabrics.
+          Our team is happy to help you with fabric care and garment maintenance.
         </p>
       </div>
 
       <hr className="border-[#BFC3C7] mb-6" />
 
       <p className="font-inter text-sm">
-        Questions about caring for your piece:{" "}
+        Need help?{" "}
         <a
-          href="mailto:hello@keptalive.com"
+          href="mailto:knotch99@gmail.com"
           className="border-b border-black pb-0.5"
         >
-          hello@keptalive.com
+          knotch99@gmail.com
         </a>
       </p>
     </div>

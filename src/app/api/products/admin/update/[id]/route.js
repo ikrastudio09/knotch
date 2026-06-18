@@ -35,6 +35,7 @@ export async function PUT(request, context) {
     const productSizeRaw = formData.get("productSize");
     const productStockRaw = formData.get("productStock");
     const imagesToRemoveRaw = formData.get("imagesToRemove");
+    const productImagesOrderRaw = formData.get("productImagesOrder");
 
     // ---------- REMOVE IMAGES ----------
     if (imagesToRemoveRaw) {
@@ -47,6 +48,9 @@ export async function PUT(request, context) {
       product.productImages = product.productImages.filter(
         (img) => !imagesToRemove.includes(img.public_id),
       );
+    }
+    if (productImagesOrderRaw) {
+      product.productImages = JSON.parse(productImagesOrderRaw);
     }
 
     // ---------- ADD NEW IMAGES ----------
@@ -88,7 +92,7 @@ export async function PUT(request, context) {
       const parsedSize = JSON.parse(productSizeRaw);
       product.productSize = parsedSize;
     }
-    
+
     if (productStockRaw) {
       const parsedStock = JSON.parse(productStockRaw);
 

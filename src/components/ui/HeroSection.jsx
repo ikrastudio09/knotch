@@ -18,7 +18,7 @@ const slides = [
   },
   {
     id: 2,
-    mobileImage: "/Images/2_m.jpeg",
+    mobileImage: "/Images/2_m.png",
     image: "/Images/2.jpeg",
     title: "Exclusive Designs",
     subtitle: "Limited Edition",

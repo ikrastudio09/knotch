@@ -24,7 +24,7 @@ export async function POST(req) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded.id).populate("cartData.productID");
-    const { shippingAddress, paymentMethod, shipping, razorpayOrderID } =
+    const { shippingAddress, paymentMethod, shipping, razorpayOrderID, paymentID, razorpaySignature } =
       await req.json();
 
     if (!shippingAddress) {
@@ -97,7 +97,10 @@ export async function POST(req) {
       shippingAddress,
       shipping,
       razorpayOrderID,
+      paymentID,
+      razorpaySignature,
       paymentMethod: "razorpay",
+      paymentStatus: "paid",
       totalAmount: total + (shipping?.cost || 0),
       totalItems,
     });

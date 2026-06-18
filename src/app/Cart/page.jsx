@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { X, Heart } from "lucide-react";
+import { X, Heart, Currency } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import toast from "react-hot-toast";
@@ -33,6 +33,20 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
   const { decrementCart, incrementWishlist } = useCart();
 
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+      script.onload = () => resolve(true);
+
+      script.onerror = () => resolve(false);
+
+      document.body.appendChild(script);
+    });
+  };
+
   const fetchCart = async () => {
     try {
       const res = await fetch("/api/cart", {
@@ -46,7 +60,7 @@ export default function CartPage() {
         setCartTotal(data.cartTotal);
       }
 
-      console.log(data.cart)
+      console.log(data.cart);
 
       setLoading(false);
     } catch (error) {
@@ -159,13 +173,13 @@ export default function CartPage() {
   };
 
   const totalMRP = cartItems.reduce(
-    (sum, item) => sum + item.originalPrice* item.quantity,
-    0
+    (sum, item) => sum + item.originalPrice * item.quantity,
+    0,
   );
 
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
 
   const discount = totalMRP - totalPrice;
@@ -173,58 +187,30 @@ export default function CartPage() {
   const finalAmount = totalPrice + platformFee;
 
   const handleSaveAddress = async () => {
-    try {
-      if (
-        !addressForm.name ||
-        !addressForm.email ||
-        !addressForm.mobile ||
-        !addressForm.pincode ||
-        !addressForm.address
-      ) {
-        toast.error("Please fill all required fields");
-        return;
-      }
-
-      const res = await fetch("/api/orders/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          shippingAddress: {
-            fullName: addressForm.name,
-            email: addressForm.email,
-            phone: addressForm.mobile,
-            AddressLine1: addressForm.houseNumber,
-            AddressLine2: addressForm.address,
-            City: addressForm.city,
-            State: addressForm.state,
-            PinCode: addressForm.pincode,
-            Country: "India",
-          },
-          shipping: {
-            method: "standard",
-            cost: 23,
-          },
-          razorpayOrderID: "test123",
-          paymentMethod: addressForm.paymentType,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        toast.success("Order placed successfully!");
-        router.push(`/Cart`);
-        setShowAddressModal(false);
-        fetchCart();
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong");
+    if (
+      !addressForm.name ||
+      !addressForm.email ||
+      !addressForm.mobile ||
+      !addressForm.pincode ||
+      !addressForm.address
+    ) {
+      toast.error("Fill all fields");
+      return;
     }
+
+    const shippingAddress = {
+      fullName: addressForm.name,
+      email: addressForm.email,
+      phone: addressForm.mobile,
+      AddressLine1: addressForm.houseNumber,
+      AddressLine2: addressForm.address,
+      City: addressForm.city,
+      State: addressForm.state,
+      PinCode: addressForm.pincode,
+      Country: "India",
+    };
+
+    placeOrder(shippingAddress);
   };
 
   const handleInputChange = (e) => {
@@ -234,41 +220,91 @@ export default function CartPage() {
     });
   };
 
-  const placeOrder = async () => {
+  const placeOrder = async (shippingAddress) => {
     if (cartItems.length === 0) {
       toast.error("Cart is empty");
       return;
     }
 
     try {
-      const res = await fetch("/api/orders/create", {
+      const loaded = await loadRazorpay();
+
+      if (!loaded) {
+        toast.error("RazorPay failed to load");
+        return;
+      }
+
+      const res = await fetch("/api/payment/create-order", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          addressIndex: selectedAddressIndex, // index of selected address
-          shipping: {
-            method: "standard",
-            cost: 23,
-          },
-          razorpayOrderID: "test123", // for testing
-          paymentMethod: "razorpay", // or "UPI"
-        }),
       });
 
       const data = await res.json();
 
-      if (data.success) {
-        toast.success("Order placed successfully!");
-        // Optional: navigate to order success page
-        window.location.href = `/Order-Success/${data.order._id}`;
-      } else {
-        toast.error(data.message || "Order failed");
+      if (!data.success) {
+        toast.error(data.message);
+        return;
       }
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        order_id: data.order.id,
+        name: "Knotch",
+        description: "Order Payment",
+        handler: async function (response) {
+          const orderRes = await fetch("/api/orders/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              shippingAddress,
+
+              shipping: {
+                method: "standard",
+                cost: 50,
+              },
+
+              razorpayOrderID: response.razorpay_order_id,
+
+              paymentID: response.razorpay_payment_id,
+
+              razorpaySignature: response.razorpay_signature,
+
+              paymentMethod: "razorpay",
+            }),
+          });
+
+          const orderData = await orderRes.json();
+          if (orderData.success) {
+            toast.success("Order Placed");
+            window.location.href = `/Orders`;
+          }
+        },
+
+        prefill: {
+          name: shippingAddress.fullName,
+          email: shippingAddress.email,
+          contact: shippingAddress.phone,
+        },
+        modal: {
+          ondismiss: function () {
+            toast.error("Payment cancelled");
+          },
+        },
+      };
+      if (!window.Razorpay) {
+        toast.error("Razorpay SDK not loaded");
+        return;
+      }
+      const paymentObject = new window.Razorpay(options);
+
+      paymentObject.open();
     } catch (error) {
-      console.error("Place order error:", error);
-      toast.error("Something went wrong while placing order");
+      console.error(error);
+
+      toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -311,7 +347,13 @@ export default function CartPage() {
                                 </div>
                                 <div className="flex items-center border border-[#BFC3C7] text-black">
                                   <button
-                                    onClick={() => updateQuantity(item.productID, item.size, "dec")}
+                                    onClick={() =>
+                                      updateQuantity(
+                                        item.productID,
+                                        item.size,
+                                        "dec",
+                                      )
+                                    }
                                     className="px-3 py-1 text-sm hover:bg-gray-100"
                                   >
                                     −
@@ -322,7 +364,13 @@ export default function CartPage() {
                                   </span>
 
                                   <button
-                                    onClick={() => updateQuantity(item.productID, item.size, "inc")}
+                                    onClick={() =>
+                                      updateQuantity(
+                                        item.productID,
+                                        item.size,
+                                        "inc",
+                                      )
+                                    }
                                     className="px-3 py-1 text-sm hover:bg-gray-100"
                                   >
                                     +
@@ -471,9 +519,7 @@ export default function CartPage() {
                 style={{ scrollbarWidth: "none" }}
               >
                 {/* ... rest of form unchanged ... */}
-                <h2
-                  className="text-[1.4rem] font-bold text-black tracking-wide mb-6 font-nunito"
-                >
+                <h2 className="text-[1.4rem] font-bold text-black tracking-wide mb-6 font-nunito">
                   Contact Details
                 </h2>
 

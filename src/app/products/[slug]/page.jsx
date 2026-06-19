@@ -122,6 +122,10 @@ export default function ProductPage() {
       });
 
       const data = await res.json();
+      if(data.status === 401 || data.unauthorised){
+        router.push("/Login");
+        return;
+      }
 
       if (data.success) {
         toast.success("Product added to cart");

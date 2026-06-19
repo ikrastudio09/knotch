@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+
 import {
-  LayoutDashboard, Package, Users, ShoppingBag,
-  Bell, ChevronRight,
+  Package, Users, ShoppingBag,
+  ChevronRight,
   Mail,
+  Tag,
 } from "lucide-react";
 
 const NAV = [
@@ -11,6 +12,7 @@ const NAV = [
   { id: "customers", label: "Customers", icon: Users },
   { id: "orders",    label: "Orders",    icon: ShoppingBag },
   { id: "subscribers",    label: "Subscribers",    icon: Mail },
+  { id: "voucher",    label: "Vouchers",    icon: Tag },
 ];
 
 export default function CMSLayout({ page, setPage, children }) {

@@ -5,6 +5,7 @@ import ProductsPage from "@/components/ui/ProductsPage";
 import CustomerPage from "@/components/ui/CustomerPage";
 import OrdersPage  from "@/components/ui/OrdersPage";
 import SubscribersPage from "@/components/ui/subscribersPage";
+import VoucherPage from "@/components/ui/VoucherPage";
 
 export default function CMSPage() {
   const [page, setPage] = useState("products");
@@ -15,6 +16,7 @@ export default function CMSPage() {
       case "customers": return <CustomerPage />;
       case "orders":    return <OrdersPage />;
       case "subscribers":    return <SubscribersPage />;
+      case "voucher":    return <VoucherPage />;
       default:          return <ProductsPage />;
     }
   };

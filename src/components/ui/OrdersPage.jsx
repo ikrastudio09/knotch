@@ -6,9 +6,6 @@ import {
   MapPin,
   Phone,
   Mail,
-  Package,
-  CreditCard,
-  Truck,
 } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 

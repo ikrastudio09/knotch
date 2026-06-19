@@ -34,7 +34,7 @@ const slides = [
     subtitle: "Classic Collection",
     description: "Where sophistication meets comfort",
     buttonText: "View Collection",
-    buttonLink: "/products",
+    buttonLink: "/#contact",
   },
 ];
 
@@ -59,7 +59,7 @@ export default function HeroCarousel() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden mt-16 sm:mt-0">
       {/* Slides */}
       {slides.map((slide, index) => (
         <Link

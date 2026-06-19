@@ -50,8 +50,7 @@ export async function GET() {
       cartTotal += price * item.productQuantity;
 
       const stockForSize = product.productStock.get(item.productSize) || 0;
-      
-      console.log(product);
+     
       return {
         productID: product._id,
         productName: product.productName,

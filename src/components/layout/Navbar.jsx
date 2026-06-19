@@ -21,20 +21,20 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const {
-    cartCount,
-    wishlistCount,
-    fetchCounts,
-    setCartCount,
-    setWishlistCount,
-  } = useCart();
+  const { cartCount, wishlistCount, fetchCounts } = useCart();
   const router = useRouter();
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Navbar is only transparent on the home page before scrolling.
-  // Every other page starts white so text/logo stay visible.
-  const isTransparent = isHomePage && !isScrolled;
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const isTransparent = !isMobile && isHomePage && !isScrolled;
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -111,9 +111,15 @@ export default function Header() {
           aria-label="Toggle menu"
         >
           <div className="space-y-1.5">
-            <span className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`} />
-            <span className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`} />
-            <span className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`} />
+            <span
+              className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`}
+            />
+            <span
+              className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`}
+            />
+            <span
+              className={`block w-6 h-0.5 ${isTransparent ? "bg-white" : "bg-black"}`}
+            />
           </div>
         </button>
 
@@ -133,7 +139,10 @@ export default function Header() {
 
         {/* Right - Actions */}
         <div className="flex items-center space-x-4 sm:space-x-6 justify-self-end">
-          <Link href="/Cart" className="relative hover:opacity-70 transition-opacity">
+          <Link
+            href="/Cart"
+            className="relative hover:opacity-70 transition-opacity"
+          >
             <ShoppingCart size={22} />
             {cartCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-bold px-1.5 py-[1px] rounded-full min-w-[16px] flex items-center justify-center">
@@ -142,7 +151,10 @@ export default function Header() {
             )}
           </Link>
 
-          <Link href="/Wishlist" className="relative hover:opacity-70 transition-opacity hidden sm:inline-flex">
+          <Link
+            href="/Wishlist"
+            className="relative hover:opacity-70 transition-opacity hidden sm:inline-flex"
+          >
             <Heart size={22} />
             {wishlistCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-bold px-1.5 py-[1px] rounded-full min-w-[16px] flex items-center justify-center">
@@ -164,7 +176,10 @@ export default function Header() {
 
                 {isProfileOpen && (
                   <>
-                    <div className="fixed inset-0 z-10" onClick={() => setIsProfileOpen(false)} />
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setIsProfileOpen(false)}
+                    />
                     <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-xl z-20 overflow-hidden border border-gray-100">
                       <Link
                         href="/Profile"
@@ -222,7 +237,7 @@ export default function Header() {
         <nav
           className={`md:hidden flex flex-col items-center space-y-4 mt-4 pt-4 pb-2 border-t ${
             isTransparent ? "border-white/20" : "border-gray-200"
-          }`}
+          } bg-white text-black`}
         >
           <Link
             href="/products"
@@ -251,7 +266,9 @@ export default function Header() {
               <Link
                 href="/Login"
                 className={`text-sm font-semibold uppercase tracking-wide px-4 py-2 rounded-full border ${
-                  isTransparent ? "border-white text-white" : "border-black text-black"
+                  isTransparent
+                    ? "border-white text-white"
+                    : "border-black text-black"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >

@@ -189,7 +189,7 @@ export default function NewSeasonPage() {
       setLoading(true);
       const query = new URLSearchParams({
         page: reset ? 1 : page,
-        limit: 20,
+        limit: 60,
         sort: selectedSort,
         categories: filters.categories.join(","),
         minPrice: filters.priceRange[0],

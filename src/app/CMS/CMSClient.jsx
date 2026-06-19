@@ -5,6 +5,7 @@ import CMSlayout from "@/components/ui/CMSlayout";
 import ProductsPage from "@/components/ui/ProductsPage";
 import CustomerPage from "@/components/ui/CustomerPage";
 import OrdersPage from "@/components/ui/OrdersPage";
+import VoucherPage from "@/components/ui/VoucherPage";
 
 export default function CMSClient() {
   const [page, setPage] = useState("products");
@@ -19,6 +20,8 @@ export default function CMSClient() {
         return <OrdersPage />;
       case "subscribers":
         return <SubscriberPage />;
+      case "voucher":
+        return <VoucherPage />;
       default:
         return <ProductsPage />;
     }

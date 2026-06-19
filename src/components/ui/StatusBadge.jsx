@@ -8,9 +8,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-// orderStatus: pending | delivered | cancelled
-// paymentStatus: pending | paid | failed
-// shiprocket status: not_created | created | pickup_scheduled | in_transit | delivered | cancelled
 
 const ORDER_STATUS = {
   placed: {
@@ -135,12 +132,6 @@ export default function StatusBadge({ status, type = "order" }) {
   const c = map?.[status];
 
   if (!c) {
-    console.log("UNKNOWN STATUS:", {
-      status,
-      type,
-      available: Object.keys(map),
-    });
-
     return (
       <span className="px-2 py-1 text-xs bg-red-100 text-red-600">
         {String(status)}

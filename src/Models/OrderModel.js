@@ -145,6 +145,20 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    voucherCode: {
+      type: String,
+    },
+
+    voucherDiscount: {
+      type: Number,
+      default: 0,
+    },
+
+    freeShippingApplied: {
+      type: Boolean,
+      default: false,
+    },
+
     orderDate: {
       type: Date,
       default: Date.now,

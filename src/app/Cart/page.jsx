@@ -9,7 +9,9 @@ import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 export default function CartPage() {
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [savedAddresses, setSavedAddresses] = useState([]); // Empty initially - will show modal
+  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherDiscount, setVoucherDiscount] = useState(0);
+  const [freeShipping, setFreeShipping] = useState(false);
   const [addressForm, setAddressForm] = useState({
     name: "",
     email: "",
@@ -24,12 +26,8 @@ export default function CartPage() {
     paymentType: "COD",
   });
 
-  const router = useRouter();
-  const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
-
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
-  const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const { decrementCart, incrementWishlist } = useCart();
 
@@ -59,8 +57,6 @@ export default function CartPage() {
         setCartItems(data.cart);
         setCartTotal(data.cartTotal);
       }
-
-      console.log(data.cart);
 
       setLoading(false);
     } catch (error) {
@@ -183,8 +179,9 @@ export default function CartPage() {
   );
 
   const discount = totalMRP - totalPrice;
+  const shippingCost = freeShipping ? 0 : 50;
   const platformFee = 0;
-  const finalAmount = totalPrice + platformFee;
+  const finalAmount = totalPrice + platformFee + shippingCost - voucherDiscount;
 
   const handleSaveAddress = async () => {
     if (
@@ -236,6 +233,12 @@ export default function CartPage() {
 
       const res = await fetch("/api/payment/create-order", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          voucherCode,
+        }),
       });
 
       const data = await res.json();
@@ -265,6 +268,8 @@ export default function CartPage() {
                 method: "standard",
                 cost: 50,
               },
+
+              voucherCode,
 
               razorpayOrderID: response.razorpay_order_id,
 
@@ -305,6 +310,43 @@ export default function CartPage() {
       console.error(error);
 
       toast.error(error.message || "Something went wrong");
+    }
+  };
+
+  const applyVoucher = async () => {
+    try {
+      if (!voucherCode.trim()) {
+        toast.error("Enter voucher code");
+        return;
+      }
+
+      const res = await fetch("/api/voucher/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: voucherCode,
+          cartTotal: totalPrice,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setVoucherDiscount(data.discount);
+        setFreeShipping(data.freeShipping);
+
+        toast.success(data.message);
+      } else {
+        setVoucherDiscount(0);
+        setFreeShipping(false);
+
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to apply voucher");
     }
   };
 
@@ -426,6 +468,21 @@ export default function CartPage() {
 
             {/* ── RIGHT: Summary ── */}
             <div className="space-y-4">
+              <div className="flex justify-center gap-2">
+                <input
+                  value={voucherCode}
+                  onChange={(e) => setVoucherCode(e.target.value)}
+                  className="w-[70%] px-4 py-2 border border-black text-black"
+                  placeholder="Enter Coupon"
+                />
+
+                <button
+                  onClick={applyVoucher}
+                  className="text-black bg-green-500 border px-4"
+                >
+                  Apply
+                </button>
+              </div>
               {/* Price Details */}
               <div className="bg-white border border-[#BFC3C7] p-5">
                 <h3 className="text-[0.7rem] font-bold tracking-[0.14em] text-black mb-5">
@@ -448,14 +505,22 @@ export default function CartPage() {
                       − ₹{discount.toLocaleString()}
                     </span>
                   </div>
-                  {/* <div className="flex justify-between">
+                  <div className="flex justify-between">
                     <span className="font-light text-[#2B2B2B] tracking-wide">
                       Coupon Discount
                     </span>
-                    <button className="font-bold text-black underline underline-offset-2 hover:no-underline transition">
-                      Apply Coupon
-                    </button>
-                  </div> */}
+                    <span className="font-bold text-black">
+                      − ₹{voucherDiscount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Shipping Cost
+                    </span>
+                    <span className="font-bold text-black">
+                      + ₹{shippingCost.toLocaleString()}
+                    </span>
+                  </div>
                   <div className="flex justify-between">
                     <span className="font-light text-[#2B2B2B] tracking-wide">
                       Platform Fee
@@ -483,14 +548,14 @@ export default function CartPage() {
                 <p className="text-[0.7rem] font-light text-[#8A8A8A] mt-3 tracking-wide leading-relaxed">
                   By placing the order, you agree to our{" "}
                   <a
-                    href="#"
+                    href="/Terms"
                     className="text-black underline underline-offset-2 hover:no-underline"
                   >
                     Terms of Use
                   </a>{" "}
                   and{" "}
                   <a
-                    href="#"
+                    href="/Privacy"
                     className="text-black underline underline-offset-2 hover:no-underline"
                   >
                     Privacy Policy
@@ -657,45 +722,58 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {/* Right — Price Summary */}
-              <div className="bg-[#f4f4f4] p-8 border-l border-[#BFC3C7]">
-                <div className="bg-white border border-[#BFC3C7] p-6 sticky top-6">
-                  <h3 className="text-[0.7rem] font-bold tracking-[0.14em] text-black mb-5 font-nunito">
-                    PRICE DETAILS ({cartItems.length} ITEMS)
-                  </h3>
-                  <div className="space-y-3 text-[0.78rem]">
-                    <div className="flex justify-between">
-                      <span className="font-light text-[#2B2B2B] tracking-wide font-nunito">
-                        Total MRP
-                      </span>
-                      <span className="font-light text-[#2B2B2B]">
-                        ₹{totalMRP.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-light text-[#2B2B2B] tracking-wide font-nunito">
-                        Discount on MRP
-                      </span>
-                      <span className="font-bold text-black font-inter">
-                        − ₹{discount.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-light text-[#2B2B2B] tracking-wide font-nunito">
-                        Platform Fee
-                      </span>
-                      <span className="font-light text-[#2B2B2B] font-inter">
-                        ₹{platformFee}
-                      </span>
-                    </div>
-                    <div className="border-t border-[#BFC3C7] pt-4 flex justify-between font-nunito">
-                      <span className="font-bold text-black tracking-wide text-[0.82rem] font-inter">
-                        Total Amount
-                      </span>
-                      <span className="font-bold text-black text-[0.82rem] font-inter">
-                        ₹{finalAmount.toLocaleString()}
-                      </span>
-                    </div>
+              <div className="bg-white border border-[#BFC3C7] p-5">
+                <h3 className="text-[0.7rem] font-bold tracking-[0.14em] text-black mb-5">
+                  PRICE DETAILS ({cartItems.length} ITEMS)
+                </h3>
+                <div className="space-y-3 text-[0.78rem]">
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Total
+                    </span>
+                    <span className="font-light text-[#2B2B2B]">
+                      ₹{totalMRP.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Discount
+                    </span>
+                    <span className="font-bold text-black">
+                      − ₹{discount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Coupon Discount
+                    </span>
+                    <span className="font-bold text-black">
+                      − ₹{voucherDiscount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Shipping Cost
+                    </span>
+                    <span className="font-bold text-black">
+                       ₹{shippingCost.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-light text-[#2B2B2B] tracking-wide">
+                      Platform Fee
+                    </span>
+                    <span className="font-light text-[#2B2B2B]">
+                      ₹{platformFee}
+                    </span>
+                  </div>
+                  <div className="border-t border-[#BFC3C7] pt-4 flex justify-between">
+                    <span className="font-bold text-black tracking-wide text-[0.82rem]">
+                      Total Amount
+                    </span>
+                    <span className="font-bold text-black text-[0.82rem]">
+                      ₹{finalAmount.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>

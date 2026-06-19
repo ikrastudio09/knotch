@@ -19,7 +19,8 @@ export async function POST(req) {
 
     if (!token) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        { success: false, unauthorised: true, message: "Unauthorized" },
+        
         { status: 401 }
       );
     }

@@ -275,7 +275,7 @@ export default function LoginPage() {
               letterSpacing: "0.04em",
             }}
           >
-            Sign in to your KeptAlive account
+            Sign in to your knotch account
           </p>
         </div>
 
@@ -489,7 +489,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Forgot */}
+            {/* Forgot
             <div
               style={{
                 display: "flex",
@@ -513,7 +513,7 @@ export default function LoginPage() {
               >
                 Forgot Password?
               </a>
-            </div>
+            </div> */}
 
             {/* Submit */}
             <button
@@ -600,7 +600,7 @@ export default function LoginPage() {
               lineHeight: 1.7,
             }}
           >
-            By continuing, you agree to KeptAlive's{" "}
+            By continuing, you agree to knotch's{" "}
             <a
               href="/Terms"
               style={{ color: "#8A8A8A", textDecoration: "underline" }}

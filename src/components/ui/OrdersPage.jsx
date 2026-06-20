@@ -1,12 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  Eye,
-  X,
-  MapPin,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { Eye, X, MapPin, Phone, Mail } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 
 // ── Order Detail Modal ───────────────────────────────────────
@@ -14,10 +8,35 @@ function OrderModal({ order, onClose, onUpdate }) {
   const [orderStatus, setOrderStatus] = useState(order.orderStatus);
   const [paymentStatus, setPaymentStatus] = useState(order.paymentStatus);
 
-  const handleSave = () => {
-    // TODO: PATCH /api/orders/:id  { orderStatus, paymentStatus }
-    onUpdate(order._id, { orderStatus, paymentStatus });
-    onClose();
+  const handleSave = async () => {
+    try {
+      const response = await fetch(`/api/admin/orders/update/${order._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderStatus,
+          paymentStatus,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      onUpdate(order._id, {
+        orderStatus,
+        paymentStatus,
+      });
+
+      onClose();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   return (

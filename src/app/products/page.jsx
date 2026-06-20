@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import logo from "../../../public/Images/logo_nobg.png";
 import Image from "next/image";
 
-
 function ProductCard({ product, onClick }) {
   const [currentImg, setCurrentImg] = useState(0);
   const images = product.productImages || [];
@@ -130,7 +129,7 @@ export default function NewSeasonPage() {
     size: [],
   });
 
-  const fetchProducts = async (pageNumber,reset = false) => {
+  const fetchProducts = async (pageNumber, reset = false) => {
     try {
       setLoading(true);
       const query = new URLSearchParams({
@@ -149,7 +148,7 @@ export default function NewSeasonPage() {
       } else {
         setProducts((prev) => [...prev, ...data.products]);
       }
-      setHasMore(page < data.totalPages);
+      setHasMore(pageNumber < data.totalPages);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -169,15 +168,18 @@ export default function NewSeasonPage() {
 
   useEffect(() => {
     fetchCategories();
-  },[]);
+  }, []);
 
   useEffect(() => {
     setProducts([]);
     setPage(1);
+    fetchProducts(1, true);
   }, [filters, selectedSort]);
 
   useEffect(() => {
-    fetchProducts(page, page === 1);
+    if (page > 1) {
+      fetchProducts(page);
+    }
   }, [page]);
 
   const toggleFilter = (filterType, value) => {

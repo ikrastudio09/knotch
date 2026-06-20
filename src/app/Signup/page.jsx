@@ -510,7 +510,7 @@ export default function SignupPage() {
               letterSpacing: "0.03em",
             }}
           >
-            Join KeptAlive today
+            Join knotch today
           </p>
         </div>
 
@@ -916,7 +916,7 @@ export default function SignupPage() {
                   margin: 0,
                 }}
               >
-                I agree to KeptAlive's{" "}
+                I agree to knotch's{" "}
                 <a href="/Terms" className="ka-link" style={{ fontSize: "12px" }}>
                   Terms of Service
                 </a>{" "}
@@ -1002,7 +1002,7 @@ export default function SignupPage() {
               lineHeight: 1.7,
             }}
           >
-            By continuing, you agree to KeptAlive's{" "}
+            By continuing, you agree to knotch's{" "}
             <a
               href="#"
               style={{ color: "#8A8A8A", textDecoration: "underline" }}

@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Mail,
   Tag,
+  Gift,
 } from "lucide-react";
 
 const NAV = [
@@ -13,6 +14,7 @@ const NAV = [
   { id: "orders",    label: "Orders",    icon: ShoppingBag },
   { id: "subscribers",    label: "Subscribers",    icon: Mail },
   { id: "voucher",    label: "Vouchers",    icon: Tag },
+  { id: "promotion",    label: "Promotions",    icon: Gift },
 ];
 
 export default function CMSLayout({ page, setPage, children }) {

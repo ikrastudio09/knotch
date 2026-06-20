@@ -7,7 +7,7 @@ export default function HeroBanner() {
   return (
     <section style={{ fontFamily: "'Inter', sans-serif" }}>
       {/* ── Hero Image ── */}
-      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[85vh] overflow-hidden bg-[#f4f4f4]">
+      <div className="relative w-full h-[80vh] sm:h-[70vh] md:h-[80vh] lg:h-[85vh] overflow-hidden bg-[#f4f4f4]">
         {/* Desktop / Tablet */}
         <Image
           src="/Images/5.png"
@@ -24,7 +24,7 @@ export default function HeroBanner() {
           alt="Hero banner"
           fill
           priority
-          className="md:hidden object-cover"
+          className="md:hidden object-cover object-top"
           sizes="100vw"
         />
       </div>

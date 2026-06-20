@@ -33,7 +33,11 @@ export async function GET(request) {
     }
 
     if (sizes) {
-      filter.productSize = { $in: sizes.split(",") };
+      const selectedSizes = sizes.split(",");
+
+      filter.$or = selectedSizes.map((size) => ({
+        [`productStock.${size}`]: { $gt: 0 },
+      }));
     }
 
     if (minPrice || maxPrice) {

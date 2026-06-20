@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "email": "email dev",
     "seed": "node src/scripts/seedProducts.mjs"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "resend": "^6.14.0"
   },
   "devDependencies": {
+    "@react-email/ui": "^6.6.3",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "^4"

@@ -8,6 +8,7 @@ import Order from "@/Models/OrderModel";
 import { createShiprocketOrder } from "@/lib/shiprocket";
 import VoucherModel from "@/Models/VoucherModel";
 import { calculateCartTotals } from "@/lib/calculateCartTotal";
+import { sendOrderConfirmation } from "@/lib/emails/sendOrderEmail";
 
 export async function POST(req) {
   try {
@@ -24,8 +25,8 @@ export async function POST(req) {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const user = await User.findById(decoded.id).populate("cartData.productID");
+
     const {
       shippingAddress,
       paymentMethod,
@@ -34,6 +35,7 @@ export async function POST(req) {
       paymentID,
       razorpaySignature,
       voucherCode,
+      selectedPromotionId, // ← new
     } = await req.json();
 
     if (!shippingAddress) {
@@ -59,14 +61,13 @@ export async function POST(req) {
 
     const cart = user.cartData;
 
+    // ── Build items & validate stock ─────────────────────────────────────────
     let items = [];
 
     for (let item of cart) {
       const product = item.productID;
 
-      if (!product) {
-        throw new Error("Product not found");
-      }
+      if (!product) throw new Error("Product not found");
 
       const stock = product.productStock.get(item.productSize);
 
@@ -91,7 +92,14 @@ export async function POST(req) {
       });
     }
 
-    const totals = await calculateCartTotals(cart, user, voucherCode);
+    // ── Recalculate totals server-side (never trust client amounts) ───────────
+    // calculateCartTotals enforces mutual exclusion internally
+    const totals = await calculateCartTotals(
+      cart,
+      user,
+      voucherCode,
+      selectedPromotionId,
+    );
 
     const totalItems = cart.reduce(
       (sum, item) => sum + item.productQuantity,
@@ -103,6 +111,7 @@ export async function POST(req) {
       cost: totals.shippingCost,
     };
 
+    // ── Create Order document ─────────────────────────────────────────────────
     const order = await Order.create({
       orderNumber: `ORD-${Date.now()}`,
       userID: user._id,
@@ -111,53 +120,58 @@ export async function POST(req) {
       shipping: finalShipping,
       razorpayOrderID,
       paymentID,
-      voucherCode,
-      voucherDiscount: totals.voucherDiscount,
-      promotionDiscount: totals.promotionDiscount,
-      appliedPromotions: totals.appliedPromotions,
-      freeShippingApplied: totals.freeShipping,
       razorpaySignature,
       paymentMethod: "razorpay",
       paymentStatus: "paid",
       totalAmount: totals.finalAmount,
       totalItems,
+
+      // Voucher fields (unchanged from your original)
+      voucherCode: voucherCode || null,
+      voucherDiscount: totals.voucherDiscount,
+      freeShippingApplied: totals.freeShipping,
+
+      // Promotion fields (new)
+      selectedPromotionId: selectedPromotionId || null,
+      promotionDiscount: totals.promotionDiscount,
+      appliedPromotions: totals.appliedPromotions,
     });
 
+    // ── Shiprocket ────────────────────────────────────────────────────────────
     try {
       const shiprocketResponse = await createShiprocketOrder(order);
-      if (!order.shipping) {
-        order.shipping = {};
-      }
+
+      if (!order.shipping) order.shipping = {};
 
       order.shipping.orderId = shiprocketResponse.order_id;
-
       order.shipping.shipmentId = shiprocketResponse.shipment_id;
-
       order.shipping.shippingStatus = "order_created";
 
       await order.save();
+      sendOrderConfirmation({
+        user,
+        order,
+      });
     } catch (err) {
       order.shippingError = err.message;
       await order.save();
     }
 
+    // ── Voucher usage tracking (only if voucher was used) ────────────────────
     if (totals.voucher) {
       await VoucherModel.updateOne(
         { _id: totals.voucher._id },
         {
           $inc: { usedCount: 1 },
-          $addToSet: {
-            usedBy: user._id,
-          },
+          $addToSet: { usedBy: user._id },
         },
       );
     }
 
+    // ── Decrement stock ───────────────────────────────────────────────────────
     for (let item of cart) {
       await Product.updateOne(
-        {
-          _id: item.productID._id,
-        },
+        { _id: item.productID._id },
         {
           $inc: {
             [`productStock.${item.productSize}`]: -item.productQuantity,
@@ -166,6 +180,7 @@ export async function POST(req) {
       );
     }
 
+    // ── Clear cart ────────────────────────────────────────────────────────────
     user.cartData = [];
     await user.save();
 
@@ -175,9 +190,16 @@ export async function POST(req) {
       order,
     });
   } catch (error) {
+    const status =
+      error.message.includes("cannot use") ||
+      error.message.includes("requires") ||
+      error.message.includes("out of stock")
+        ? 400
+        : 500;
+
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 },
+      { status },
     );
   }
 }

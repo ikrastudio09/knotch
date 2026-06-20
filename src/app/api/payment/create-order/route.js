@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import User from "@/Models/UserModel";
 import jwt from "jsonwebtoken";
 import connectDB from "@/lib/db";
-import VoucherModel from "@/Models/VoucherModel";
+import { calculateCartTotals } from "@/lib/calculateCartTotal";
 
 export async function POST(req) {
   await connectDB();
@@ -44,76 +44,10 @@ export async function POST(req) {
 
     const { voucherCode } = await req.json();
 
-    let total = 0;
-
-    for (const item of user.cartData) {
-      total += item.productID.productSellingPrice * item.productQuantity;
-    }
-    let voucherDiscount = 0;
-    let freeShippingApplied = false;
-
-    let voucher = null;
-
-    if (voucherCode) {
-      voucher = await VoucherModel.findOne({
-        code: voucherCode.toUpperCase().trim(),
-      });
-
-      if (!voucher) {
-        throw new Error("Invalid voucher");
-      }
-
-      if (!voucher.active) {
-        throw new Error("Voucher inactive");
-      }
-
-      const now = new Date();
-
-      if (voucher.validFrom && now < voucher.validFrom) {
-        throw new Error("Voucher not started");
-      }
-
-      if (voucher.validTill && now > voucher.validTill) {
-        throw new Error("Voucher expired");
-      }
-
-      if (voucher.usedBy.some((id) => id.toString() === user._id.toString())) {
-        throw new Error("Voucher already used");
-      }
-
-      if (total < voucher.minOrderAmount) {
-        throw new Error(`Minimum order amount ₹${voucher.minOrderAmount}`);
-      }
-
-      if (voucher.usageLimit && voucher.usedCount >= voucher.usageLimit) {
-        throw new Error("Voucher usage limit reached");
-      }
-
-      if (voucher.discountType === "flat") {
-        voucherDiscount = voucher.discountValue;
-      }
-
-      if (voucher.discountType === "percentage") {
-        voucherDiscount = (total * voucher.discountValue) / 100;
-      }
-
-      if (voucher.maxDiscount && voucherDiscount > voucher.maxDiscount) {
-        voucherDiscount = voucher.maxDiscount;
-      }
-
-      if (voucher.freeShipping) {
-        freeShippingApplied = true;
-      }
-
-      voucherDiscount = Math.min(voucherDiscount, total);
-    }
-
-    const shippingCost = freeShippingApplied ? 0 : 50;
-
-    const finalAmount = total + shippingCost - voucherDiscount;
+    const totals = await calculateCartTotals(user.cartData, user, voucherCode);
 
     const order = await razorpay.orders.create({
-      amount: finalAmount * 100,
+      amount: totals.finalAmount * 100,
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     });
@@ -122,11 +56,11 @@ export async function POST(req) {
       success: true,
       order,
 
-      payableAmount: finalAmount,
+      payableAmount: totals.finalAmount,
 
-      voucherDiscount,
+      voucherDiscount: totals.voucherDiscount,
 
-      freeShippingApplied,
+      freeShippingApplied: totals.freeShipping,
     });
   } catch (error) {
     return NextResponse.json(

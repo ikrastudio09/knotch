@@ -1,19 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  ChevronDown,
-  Grid2x2,
-  Grid3x3,
-  Search,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-} from "lucide-react";
+import { ChevronDown, Grid2x2, Grid3x3 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useParams, useRouter } from "next/navigation";
+import logo from "../../../../../public/Images/logo_nobg.png";
+import Image from "next/image";
 
 function ProductCard({ product, onClick }) {
   const [currentImg, setCurrentImg] = useState(0);
@@ -51,6 +44,13 @@ function ProductCard({ product, onClick }) {
         className="relative overflow-hidden bg-[#f4f4f4] mb-3"
         style={{ aspectRatio: "3/4" }}
       >
+        <Image
+          src={logo}
+          alt="Knotch"
+          width={48}
+          height={48}
+          className="absolute top-3 left-3 z-10 opacity-90 select-none"
+        ></Image>
         {images.length === 0 && (
           <div className="absolute inset-0 bg-[#f4f4f4]" />
         )}
@@ -120,11 +120,11 @@ export default function NewSeasonPage() {
   const router = useRouter();
   const { type } = useParams();
 
-  const fetchProducts = async (reset = false) => {
+  const fetchProducts = async (pageNumber,reset = false) => {
     try {
       setLoading(true);
       let params = {
-        page: reset ? 1 : page,
+        page: pageNumber,
         limit: 16,
         sort: selectedSort,
         categories: filters.categories.join(","),
@@ -140,9 +140,8 @@ export default function NewSeasonPage() {
       const query = new URLSearchParams(params);
       const res = await fetch(`/api/products?${query}`);
       const data = await res.json();
-
       if (reset) {
-        setProducts(data.products);
+        setProducts(data.products || []);
       } else {
         setProducts((prev) => [...prev, ...data.products]);
       }
@@ -178,10 +177,14 @@ export default function NewSeasonPage() {
   }, []);
 
   useEffect(() => {
-    if (!type) return;
+    setProducts([]);
     setPage(1);
-    fetchProducts(true);
-  }, [type, filters, selectedSort]);
+  }, [type, selectedSort, filters]);
+
+  useEffect(() => {
+    if (!type) return;
+    fetchProducts(page,page === 1);
+  }, [page, type]);
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
@@ -404,7 +407,6 @@ export default function NewSeasonPage() {
               <button
                 onClick={() => {
                   setPage((prev) => prev + 1);
-                  fetchProducts();
                 }}
                 className="px-8 py-3 text-[0.72rem] font-bold tracking-[0.16em] border border-black bg-white text-black hover:bg-black hover:text-white transition cursor-pointer"
               >

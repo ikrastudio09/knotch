@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import User from "@/Models/UserModel";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import Product from "@/Models/ProductModel";
+import Category from "@/Models/CategoryModel";
 
 export const runtime = "nodejs";
 

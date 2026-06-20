@@ -8,7 +8,6 @@ import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCart } from "@/context/CartContext";
 
-
 export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState("S");
   const [selectedColor, setSelectedColor] = useState("");
@@ -21,7 +20,7 @@ export default function ProductPage() {
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
   const { slug } = useParams();
   const router = useRouter();
-  const {incrementCart, incrementWishlist, decrementWishlist} = useCart();
+  const { incrementCart, incrementWishlist, decrementWishlist } = useCart();
 
   useEffect(() => {
     if (!slug) return;
@@ -62,7 +61,10 @@ export default function ProductPage() {
 
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div
+        className="min-h-screen flex items-center justify-center bg-white"
+        style={{ fontFamily: "'Inter', sans-serif" }}
+      >
         <p className="text-[#8A8A8A] text-sm tracking-widest font-light">
           LOADING...
         </p>
@@ -71,7 +73,10 @@ export default function ProductPage() {
 
   if (!product)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div
+        className="min-h-screen flex items-center justify-center bg-white"
+        style={{ fontFamily: "'Inter', sans-serif" }}
+      >
         <p className="text-[#8A8A8A] text-sm tracking-widest font-light">
           PRODUCT NOT FOUND
         </p>
@@ -93,14 +98,12 @@ export default function ProductPage() {
           setWishlist(true);
           toast.success("Product added to wishlist");
           incrementWishlist();
-        }
-        else if (data.action === "removed") {
+        } else if (data.action === "removed") {
           setWishlist(false);
           toast.success("Product removed from wishlist");
           decrementWishlist();
         }
       }
-
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong. Please try again.");
@@ -122,7 +125,7 @@ export default function ProductPage() {
       });
 
       const data = await res.json();
-      if(data.status === 401 || data.unauthorised){
+      if (data.status === 401 || data.unauthorised) {
         router.push("/Login");
         return;
       }
@@ -145,33 +148,43 @@ export default function ProductPage() {
   const discount =
     product.productOriginalPrice && product.productSellingPrice
       ? Math.round(
-        ((product.productOriginalPrice - product.productSellingPrice) /
-          product.productOriginalPrice) *
-        100,
-      )
+          ((product.productOriginalPrice - product.productSellingPrice) /
+            product.productOriginalPrice) *
+            100,
+        )
       : null;
 
   const allImages = product.productImages || [];
   const totalSlides = allImages.length;
 
-  const prevSlide = () => setActiveSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
-  const nextSlide = () => setActiveSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+  const prevSlide = () =>
+    setActiveSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
+  const nextSlide = () =>
+    setActiveSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
 
   return (
     <>
       <Navbar />
-      <div className="bg-white md:pt-16 pt-16" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div
+        className="bg-white md:pt-16 pt-16"
+        style={{ fontFamily: "'Inter', sans-serif" }}
+      >
         <main className="max-w-400 mx-auto">
-
           {/* ── MOBILE / TABLET: Carousel ── */}
           <div className="xl:hidden">
-            <div className="relative w-full overflow-hidden bg-[#f4f4f4]" style={{ aspectRatio: "3/4" }}>
+            <div
+              className="relative w-full overflow-hidden bg-[#f4f4f4]"
+              style={{ aspectRatio: "3/4" }}
+            >
               <div
                 className="flex h-full transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${activeSlide * 100}%)` }}
               >
                 {allImages.map((image, index) => (
-                  <div key={index} className="basis-full w-full h-full shrink-0">
+                  <div
+                    key={index}
+                    className="basis-full w-full h-full shrink-0"
+                  >
                     <img
                       src={image.url}
                       alt={`${product.productName} view ${index + 1}`}
@@ -189,12 +202,16 @@ export default function ProductPage() {
 
               <button
                 onClick={toggleWishlist}
-                className={`absolute top-3 right-3 p-2.5 rounded-full z-10 transition-all duration-200 ${wishlist ? "bg-black" : "bg-white"
-                  }`}
+                className={`absolute top-3 right-3 p-2.5 rounded-full z-10 transition-all duration-200 ${
+                  wishlist ? "bg-black" : "bg-white"
+                }`}
               >
                 <Heart
-                  className={`w-5 h-5 transition-all duration-200 ${wishlist ? "fill-white text-white" : "fill-transparent text-[#2B2B2B]"
-                    }`}
+                  className={`w-5 h-5 transition-all duration-200 ${
+                    wishlist
+                      ? "fill-white text-white"
+                      : "fill-transparent text-[#2B2B2B]"
+                  }`}
                 />
               </button>
 
@@ -221,10 +238,11 @@ export default function ProductPage() {
                     <button
                       key={index}
                       onClick={() => setActiveSlide(index)}
-                      className={`rounded-full transition-all duration-300 ${index === activeSlide
-                        ? "bg-black w-5 h-1.5"
-                        : "bg-white/70 w-1.5 h-1.5"
-                        }`}
+                      className={`rounded-full transition-all duration-300 ${
+                        index === activeSlide
+                          ? "bg-black w-5 h-1.5"
+                          : "bg-white/70 w-1.5 h-1.5"
+                      }`}
                     />
                   ))}
                 </div>
@@ -263,7 +281,9 @@ export default function ProductPage() {
               {product.productSize?.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">SELECT SIZE</h3>
+                    <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">
+                      SELECT SIZE
+                    </h3>
                     <button
                       onClick={() => setSizeChartOpen(true)}
                       className="text-[0.7rem] font-light text-[#8A8A8A] tracking-widest hover:text-black transition underline underline-offset-2"
@@ -272,52 +292,81 @@ export default function ProductPage() {
                     </button>
                   </div>
                   <div className="flex gap-2 flex-wrap">
-                    {product.productSize.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-4 py-2 text-sm font-light border tracking-wider transition ${selectedSize === size
-                          ? "bg-black text-white border-black"
-                          : "bg-white text-[#2B2B2B] border-[#BFC3C7] hover:border-black"
-                          }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {product.productSize.map((size) => {
+                      const stock =
+                        product.productStock?.get?.(size) ??
+                        product.productStock?.[size] ??
+                        0;
+
+                      const isOutOfStock = stock <= 0;
+
+                      return (
+                        <button
+                          key={size}
+                          onClick={() => !isOutOfStock && setSelectedSize(size)}
+                          disabled={isOutOfStock}
+                          className={`relative px-4 py-2 text-sm font-light border tracking-wider transition
+          ${
+            selectedSize === size && !isOutOfStock
+              ? "bg-black text-white border-black"
+              : "bg-white text-[#2B2B2B] border-[#BFC3C7]"
+          }
+          ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:border-black"}
+        `}
+                        >
+                          {size}
+
+                          {isOutOfStock && (
+                            <>
+                              <span className="absolute inset-0 flex items-center justify-center text-red-500 text-lg font-bold">
+                                ✕
+                              </span>
+                            </>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                   <p className="text-[0.72rem] text-black mt-2">
-                    {product.productStock?.get?.(selectedSize) || product.productStock?.[selectedSize]} pieces left
+                    {product.productStock?.get?.(selectedSize) ||
+                      product.productStock?.[selectedSize]}{" "}
+                    pieces left
                   </p>
                 </div>
-
-
               )}
 
               {product.productColour?.length > 0 && (
                 <div>
-                  <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">SELECT COLOUR</h3>
+                  <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">
+                    SELECT COLOUR
+                  </h3>
                   <div className="flex gap-3 flex-wrap">
                     {product.productColour.map((color) => (
                       <button
                         key={color}
                         onClick={() => setSelectedColor(color)}
                         title={color}
-                        className={`w-9 h-9 rounded-full border-2 transition ${selectedColor === color
-                          ? "border-black ring-2 ring-offset-2 ring-black"
-                          : "border-[#BFC3C7] hover:border-black"
-                          }`}
+                        className={`w-9 h-9 rounded-full border-2 transition ${
+                          selectedColor === color
+                            ? "border-black ring-2 ring-offset-2 ring-black"
+                            : "border-[#BFC3C7] hover:border-black"
+                        }`}
                         style={{ backgroundColor: color }}
                       />
                     ))}
                   </div>
                   {selectedColor && (
-                    <p className="text-[0.72rem] text-[#8A8A8A] mt-2 tracking-wide">{selectedColor}</p>
+                    <p className="text-[0.72rem] text-[#8A8A8A] mt-2 tracking-wide">
+                      {selectedColor}
+                    </p>
                   )}
                 </div>
               )}
 
               <div>
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">QUANTITY</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">
+                  QUANTITY
+                </h3>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -347,12 +396,18 @@ export default function ProductPage() {
                 </button>
                 <button
                   onClick={toggleWishlist}
-                  className={`p-4 border transition-all duration-200 ${wishlist ? "border-black bg-black" : "border-[#BFC3C7] hover:border-black"
-                    }`}
+                  className={`p-4 border transition-all duration-200 ${
+                    wishlist
+                      ? "border-black bg-black"
+                      : "border-[#BFC3C7] hover:border-black"
+                  }`}
                 >
                   <Heart
-                    className={`w-5 h-5 transition-all duration-200 ${wishlist ? "fill-white text-white" : "fill-transparent text-[#2B2B2B]"
-                      }`}
+                    className={`w-5 h-5 transition-all duration-200 ${
+                      wishlist
+                        ? "fill-white text-white"
+                        : "fill-transparent text-[#2B2B2B]"
+                    }`}
                   />
                 </button>
               </div>
@@ -361,7 +416,6 @@ export default function ProductPage() {
 
           {/* ── DESKTOP: 3-equal-column layout ── */}
           <div className="hidden xl:grid grid-cols-3 gap-2 pt-4 items-start">
-
             {/* COL 1: Sticky main image */}
             <div className="sticky top-16 self-start">
               <div
@@ -439,7 +493,9 @@ export default function ProductPage() {
               {product.productSize?.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">SELECT SIZE</h3>
+                    <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">
+                      SELECT SIZE
+                    </h3>
                     <button
                       onClick={() => setSizeChartOpen(true)}
                       className="text-[0.7rem] font-light text-[#8A8A8A] tracking-widest hover:text-black transition underline underline-offset-2"
@@ -448,47 +504,76 @@ export default function ProductPage() {
                     </button>
                   </div>
                   <div className="flex gap-2 flex-wrap">
-                    {product.productSize.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-4 py-2 text-sm font-light border tracking-wider transition ${selectedSize === size
-                          ? "bg-black text-white border-black"
-                          : "bg-white text-[#2B2B2B] border-[#BFC3C7] hover:border-black"
-                          }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {product.productSize.map((size) => {
+                      const stock =
+                        product.productStock?.get?.(size) ??
+                        product.productStock?.[size] ??
+                        0;
+
+                      const isOutOfStock = stock <= 0;
+
+                      return (
+                        <button
+                          key={size}
+                          onClick={() => !isOutOfStock && setSelectedSize(size)}
+                          disabled={isOutOfStock}
+                          className={`relative px-4 py-2 text-sm font-light border tracking-wider transition
+          ${
+            selectedSize === size && !isOutOfStock
+              ? "bg-black text-white border-black"
+              : "bg-white text-[#2B2B2B] border-[#BFC3C7]"
+          }
+          ${isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:border-black"}
+        `}
+                        >
+                          {size}
+
+                          {isOutOfStock && (
+                            <>
+                              <span className="absolute inset-0 flex items-center justify-center text-black text-lg font-bold">
+                                ✕
+                              </span>
+                            </>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
               {product.productColour?.length > 0 && (
                 <div>
-                  <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-4">SELECT COLOUR</h3>
+                  <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-4">
+                    SELECT COLOUR
+                  </h3>
                   <div className="flex gap-3 flex-wrap">
                     {product.productColour.map((color) => (
                       <button
                         key={color}
                         onClick={() => setSelectedColor(color)}
                         title={color}
-                        className={`w-9 h-9 rounded-full border-2 transition ${selectedColor === color
-                          ? "border-black ring-2 ring-offset-2 ring-black"
-                          : "border-[#BFC3C7] hover:border-black"
-                          }`}
+                        className={`w-9 h-9 rounded-full border-2 transition ${
+                          selectedColor === color
+                            ? "border-black ring-2 ring-offset-2 ring-black"
+                            : "border-[#BFC3C7] hover:border-black"
+                        }`}
                         style={{ backgroundColor: color }}
                       />
                     ))}
                   </div>
                   {selectedColor && (
-                    <p className="text-[0.72rem] text-[#8A8A8A] mt-2 tracking-wide">{selectedColor}</p>
+                    <p className="text-[0.72rem] text-[#8A8A8A] mt-2 tracking-wide">
+                      {selectedColor}
+                    </p>
                   )}
                 </div>
               )}
 
               <div>
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-4">QUANTITY</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-4">
+                  QUANTITY
+                </h3>
                 <div className="flex items-center gap-4">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -512,17 +597,24 @@ export default function ProductPage() {
                 <button
                   onClick={addToCart}
                   disabled={!canAddToCart}
-                  className="flex-1 bg-black text-white py-4 px-6 text-[0.75rem] font-bold tracking-[0.18em] uppercase hover:bg-[#2B2B2B] transition">
+                  className="flex-1 bg-black text-white py-4 px-6 text-[0.75rem] font-bold tracking-[0.18em] uppercase hover:bg-[#2B2B2B] transition"
+                >
                   Add to Bag
                 </button>
                 <button
                   onClick={toggleWishlist}
-                  className={`p-4 border transition-all duration-200 ${wishlist ? "border-black bg-black" : "border-[#BFC3C7] hover:border-black"
-                    }`}
+                  className={`p-4 border transition-all duration-200 ${
+                    wishlist
+                      ? "border-black bg-black"
+                      : "border-[#BFC3C7] hover:border-black"
+                  }`}
                 >
                   <Heart
-                    className={`w-5 h-5 transition-all duration-200 ${wishlist ? "fill-white text-white" : "fill-transparent text-[#2B2B2B]"
-                      }`}
+                    className={`w-5 h-5 transition-all duration-200 ${
+                      wishlist
+                        ? "fill-white text-white"
+                        : "fill-transparent text-[#2B2B2B]"
+                    }`}
                   />
                 </button>
               </div>
@@ -624,26 +716,67 @@ export default function ProductPage() {
                   <table className="w-full text-left border-collapse min-w-[560px]">
                     <thead>
                       <tr className="bg-black text-white">
-                        {["Size", "Shoulder", "Chest", "Height", "Sleeve Open", "Half Sleeve", "Full Sleeve"].map(
-                          (h) => (
-                            <th
-                              key={h}
-                              className="px-3 py-2.5 text-[0.65rem] font-bold tracking-widest whitespace-nowrap"
-                            >
-                              {h}
-                            </th>
-                          )
-                        )}
+                        {[
+                          "Size",
+                          "Shoulder",
+                          "Chest",
+                          "Height",
+                          "Sleeve Open",
+                          "Half Sleeve",
+                          "Full Sleeve",
+                        ].map((h) => (
+                          <th
+                            key={h}
+                            className="px-3 py-2.5 text-[0.65rem] font-bold tracking-widest whitespace-nowrap"
+                          >
+                            {h}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
                       {[
-                        ["S", "28–32", "32–38", "24–27", "7–11", "7–8", "22–24.5"],
-                        ["M", "33–36", "39–42", "26–29", "8–13", "7.5–8.5", "24–25.5"],
-                        ["L", "37–39", "43–45", "26–30", "12–14", "8–9", "25–26"],
-                        ["XL", "40+", "46–48", "28–30+", "14–15", "8.5–9", "25.5–26"],
+                        [
+                          "S",
+                          "28–32",
+                          "32–38",
+                          "24–27",
+                          "7–11",
+                          "7–8",
+                          "22–24.5",
+                        ],
+                        [
+                          "M",
+                          "33–36",
+                          "39–42",
+                          "26–29",
+                          "8–13",
+                          "7.5–8.5",
+                          "24–25.5",
+                        ],
+                        [
+                          "L",
+                          "37–39",
+                          "43–45",
+                          "26–30",
+                          "12–14",
+                          "8–9",
+                          "25–26",
+                        ],
+                        [
+                          "XL",
+                          "40+",
+                          "46–48",
+                          "28–30+",
+                          "14–15",
+                          "8.5–9",
+                          "25.5–26",
+                        ],
                       ].map((row, i) => (
-                        <tr key={row[0]} className={i % 2 === 0 ? "bg-white" : "bg-[#f4f4f4]"}>
+                        <tr
+                          key={row[0]}
+                          className={i % 2 === 0 ? "bg-white" : "bg-[#f4f4f4]"}
+                        >
                           {row.map((cell, idx) => (
                             <td
                               key={idx}
@@ -661,7 +794,9 @@ export default function ProductPage() {
 
               {/* PRODUCT DETAILS */}
               <div className="border-t border-[#BFC3C7] pt-6">
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">PRODUCT DETAILS</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">
+                  PRODUCT DETAILS
+                </h3>
                 <p className="text-[0.82rem] font-light text-[#2B2B2B] leading-relaxed tracking-wide">
                   {product.productDescription}
                 </p>
@@ -669,7 +804,9 @@ export default function ProductPage() {
 
               {/* WASH & CARE */}
               <div className="border-t border-[#BFC3C7] pt-6">
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">WASH & CARE</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">
+                  WASH & CARE
+                </h3>
                 <ul className="text-[0.82rem] font-light text-[#2B2B2B] leading-relaxed tracking-wide list-disc pl-4 flex flex-col gap-1">
                   <li>Machine wash cold, with similar colours</li>
                   <li>Do not bleach</li>
@@ -681,19 +818,25 @@ export default function ProductPage() {
 
               {/* FIT NOTES */}
               <div className="border-t border-[#BFC3C7] pt-6">
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">FIT NOTES</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black mb-3">
+                  FIT NOTES
+                </h3>
                 <p className="text-[0.82rem] font-light text-[#2B2B2B] leading-relaxed tracking-wide">
-                  This style is designed with a true-to-size, relaxed fit. We recommend
-                  choosing your usual size for the most comfortable wear. If you prefer
-                  an oversized look, consider sizing up by one.
+                  This style is designed with a true-to-size, relaxed fit. We
+                  recommend choosing your usual size for the most comfortable
+                  wear. If you prefer an oversized look, consider sizing up by
+                  one.
                 </p>
               </div>
 
               {/* GET IN TOUCH */}
               <div className="border-t border-[#BFC3C7] pt-6 flex flex-col gap-3">
-                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">STILL UNSURE?</h3>
+                <h3 className="text-[0.7rem] font-bold tracking-[0.16em] text-black">
+                  STILL UNSURE?
+                </h3>
                 <p className="text-[0.82rem] font-light text-[#2B2B2B] leading-relaxed tracking-wide">
-                  Our style team is happy to help you find the right fit before you order.
+                  Our style team is happy to help you find the right fit before
+                  you order.
                 </p>
                 <a
                   href="mailto:support@knotch.com"

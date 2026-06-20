@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db.js";
 import Product from "@/Models/ProductModel.js";
-import '@/Models/CategoryModel.js';
+import "@/Models/CategoryModel.js";
 
 export const runtime = "nodejs";
 
@@ -28,12 +28,12 @@ export async function GET(request) {
       filter.displayAt = displayAt;
     }
 
-    if(categories){
-        filter.productCategory = {$in: categories.split(",")};
+    if (categories) {
+      filter.productCategory = { $in: categories.split(",") };
     }
 
-    if(sizes){
-      filter.productSize = {$in: sizes.split(",")};
+    if (sizes) {
+      filter.productSize = { $in: sizes.split(",") };
     }
 
     if (minPrice || maxPrice) {
@@ -49,17 +49,32 @@ export async function GET(request) {
 
     let sortOption = {};
 
+    sortOption = {
+      createdAt: -1,
+      _id: -1,
+    };
+
     switch (sort) {
       case "Price: Low to High":
-        sortOption = { productSellingPrice: 1 };
+        sortOption = {
+          productSellingPrice: 1,
+          _id: 1,
+        };
         break;
-      case "Price: High to Low":
-        sortOption = { productSellingPrice: -1 };
-        break;
-      default:
-        sortOption = { createdAt: -1 }; // newest
-    }
 
+      case "Price: High to Low":
+        sortOption = {
+          productSellingPrice: -1,
+          _id: -1,
+        };
+        break;
+
+      default:
+        sortOption = {
+          createdAt: -1,
+          _id: -1,
+        };
+    }
     const [products, total] = await Promise.all([
       Product.find(filter)
         .populate("productCategory", "name")

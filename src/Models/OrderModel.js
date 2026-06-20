@@ -154,6 +154,18 @@ const orderSchema = new mongoose.Schema(
       default: 0,
     },
 
+    promotionDiscount: {
+      type: Number,
+      default: 0,
+    },
+
+    appliedPromotions: [
+      {
+        title: String,
+        discount: Number,
+      },
+    ],
+
     freeShippingApplied: {
       type: Boolean,
       default: false,

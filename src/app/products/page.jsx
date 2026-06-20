@@ -5,70 +5,9 @@ import { ChevronDown, Grid2x2, Grid3x3 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useRouter } from "next/navigation";
+import logo from "../../../public/Images/logo_nobg.png";
+import Image from "next/image";
 
-// function ProductCard({ product, onClick }) {
-//   const [currentImg, setCurrentImg] = useState(0);
-//   const images = product.productImages || [];
-//   const intervalRef = useRef(null);
-
-//   const startSlideshow = () => {
-//     if (images.length <= 1) return;
-//     let idx = 0;
-//     intervalRef.current = setInterval(() => {
-//       idx = (idx + 1) % images.length;
-//       setCurrentImg(idx);
-//     }, 800);
-//   };
-
-//   const stopSlideshow = () => {
-//     if (intervalRef.current) {
-//       clearInterval(intervalRef.current);
-//       intervalRef.current = null;
-//     }
-//     setCurrentImg(0);
-//   };
-
-//   useEffect(() => () => clearInterval(intervalRef.current), []);
-
-//   return (
-//     <div
-//       className="cursor-pointer group"
-//       onClick={onClick}
-//       onMouseEnter={startSlideshow}
-//       onMouseLeave={stopSlideshow}
-//     >
-//       {/* Image wrapper */}
-//       <div
-//         className="relative overflow-hidden bg-[#f4f4f4] mb-3"
-//         style={{ aspectRatio: "3/4" }}
-//       >
-//         {images.length === 0 && (
-//           <div className="absolute inset-0 bg-[#f4f4f4]" />
-//         )}
-//         {images.map((img, i) => (
-//           <img
-//             key={i}
-//             src={img.url}
-//             alt={product.productName}
-//             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-//               i === currentImg ? "opacity-100" : "opacity-0"
-//             }`}
-//           />
-//         ))}
-//       </div>
-
-//       {/* Info */}
-//       <div className="flex flex-col gap-1">
-//         <p className="text-[#2B2B2B] text-[0.82rem] font-light group-hover:underline">
-//           {product.productName}
-//         </p>
-//         <p className="text-[#000] text-[0.82rem] font-bold">
-//           Rs. {product.productSellingPrice?.toLocaleString()}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
 
 function ProductCard({ product, onClick }) {
   const [currentImg, setCurrentImg] = useState(0);
@@ -106,6 +45,13 @@ function ProductCard({ product, onClick }) {
         className="relative overflow-hidden bg-[#f4f4f4] mb-3"
         style={{ aspectRatio: "3/4" }}
       >
+        <Image
+          src={logo}
+          alt="Knotch"
+          width={48}
+          height={48}
+          className="absolute top-3 left-3 z-10 opacity-90 select-none"
+        ></Image>
         {images.length === 0 && (
           <div className="absolute inset-0 bg-[#f4f4f4]" />
         )}
@@ -184,12 +130,12 @@ export default function NewSeasonPage() {
     size: [],
   });
 
-  const fetchProducts = async (reset = false) => {
+  const fetchProducts = async (pageNumber,reset = false) => {
     try {
       setLoading(true);
       const query = new URLSearchParams({
-        page: reset ? 1 : page,
-        limit: 60,
+        page: pageNumber,
+        limit: 20,
         sort: selectedSort,
         categories: filters.categories.join(","),
         minPrice: filters.priceRange[0],
@@ -222,10 +168,17 @@ export default function NewSeasonPage() {
   };
 
   useEffect(() => {
-    setPage(1);
-    fetchProducts(true);
     fetchCategories();
+  },[]);
+
+  useEffect(() => {
+    setProducts([]);
+    setPage(1);
   }, [filters, selectedSort]);
+
+  useEffect(() => {
+    fetchProducts(page, page === 1);
+  }, [page]);
 
   const toggleFilter = (filterType, value) => {
     setFilters((prev) => ({
@@ -444,7 +397,6 @@ export default function NewSeasonPage() {
               <button
                 onClick={() => {
                   setPage((prev) => prev + 1);
-                  fetchProducts();
                 }}
                 className="px-8 py-3 text-[0.72rem] font-bold tracking-[0.16em] border border-black bg-white text-black hover:bg-black hover:text-white transition cursor-pointer"
               >

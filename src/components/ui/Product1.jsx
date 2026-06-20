@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../../../public/Images/logo_nobg.png";
 
 export default function KeptaliveCollection() {
   const [products, setProducts] = useState([]);
@@ -36,12 +38,18 @@ export default function KeptaliveCollection() {
               {/* Image Box */}
               <div className="relative overflow-hidden bg-[#e8ddd0] aspect-3/4">
                 {/* Brand watermark */}
-                <span className="absolute top-3 left-3 z-10 text-white text-xs font-light tracking-wide opacity-90 select-none">
-                  knotch
-                </span>
-                <img
+                <Image
+                  src={logo}
+                  alt="Knotch"
+                  width={48}
+                  height={48}
+                  className="absolute top-3 left-3 z-10 opacity-90 select-none"
+                >
+                </Image>
+                <Image
                   src={product.productImages[0].url}
                   alt={product.productName}
+                  fill
                   className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 />
               </div>

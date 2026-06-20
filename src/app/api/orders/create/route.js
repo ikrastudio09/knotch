@@ -7,6 +7,7 @@ import Product from "@/Models/ProductModel";
 import Order from "@/Models/OrderModel";
 import { createShiprocketOrder } from "@/lib/shiprocket";
 import VoucherModel from "@/Models/VoucherModel";
+import { calculateCartTotals } from "@/lib/calculateCartTotal";
 
 export async function POST(req) {
   try {
@@ -59,7 +60,6 @@ export async function POST(req) {
     const cart = user.cartData;
 
     let items = [];
-    let total = 0;
 
     for (let item of cart) {
       const product = item.productID;
@@ -89,77 +89,18 @@ export async function POST(req) {
         productSize: item.productSize,
         quantity: item.productQuantity,
       });
-
-      total += product.productSellingPrice * item.productQuantity;
     }
 
-    let voucherDiscount = 0;
-    let freeShippingApplied = false;
-    let voucher = null;
-
-    if (voucherCode) {
-      voucher = await VoucherModel.findOne({
-        code: voucherCode.toUpperCase().trim(),
-      });
-
-      if (!voucher) {
-        throw new Error("Invalid voucher");
-      }
-
-      if (!voucher.active) {
-        throw new Error("Voucher inactive");
-      }
-
-      if (voucher.usedBy.some((id) => id.toString() === user._id.toString())) {
-        throw new Error("Voucher already used");
-      }
-
-      const now = new Date();
-
-      if (voucher.validFrom && now < voucher.validFrom) {
-        throw new Error("Voucher not started");
-      }
-
-      if (voucher.validTill && now > voucher.validTill) {
-        throw new Error("Voucher expired");
-      }
-
-      if (total < voucher.minOrderAmount) {
-        throw new Error(`Minimum order amount ₹${voucher.minOrderAmount}`);
-      }
-
-      if (voucher.usageLimit && voucher.usedCount >= voucher.usageLimit) {
-        throw new Error("Voucher usage limit reached");
-      }
-
-      if (voucher.discountType === "flat") {
-        voucherDiscount = voucher.discountValue;
-      }
-
-      if (voucher.discountType === "percentage") {
-        voucherDiscount = (total * voucher.discountValue) / 100;
-      }
-
-      if (voucher.maxDiscount && voucherDiscount > voucher.maxDiscount) {
-        voucherDiscount = voucher.maxDiscount;
-      }
-
-      if (voucher.freeShipping) {
-        freeShippingApplied = true;
-      }
-
-      voucherDiscount = Math.min(voucherDiscount, total);
-    }
+    const totals = await calculateCartTotals(cart, user, voucherCode);
 
     const totalItems = cart.reduce(
       (sum, item) => sum + item.productQuantity,
       0,
     );
-    const shippingCost = freeShippingApplied ? 0 : shipping?.cost || 0;
-    const finalAmount = total + shippingCost - voucherDiscount;
+
     const finalShipping = {
       ...shipping,
-      cost: shippingCost,
+      cost: totals.shippingCost,
     };
 
     const order = await Order.create({
@@ -171,12 +112,14 @@ export async function POST(req) {
       razorpayOrderID,
       paymentID,
       voucherCode,
-      voucherDiscount,
-      freeShippingApplied,
+      voucherDiscount: totals.voucherDiscount,
+      promotionDiscount: totals.promotionDiscount,
+      appliedPromotions: totals.appliedPromotions,
+      freeShippingApplied: totals.freeShipping,
       razorpaySignature,
       paymentMethod: "razorpay",
       paymentStatus: "paid",
-      totalAmount: finalAmount,
+      totalAmount: totals.finalAmount,
       totalItems,
     });
 
@@ -198,9 +141,9 @@ export async function POST(req) {
       await order.save();
     }
 
-    if (voucher) {
+    if (totals.voucher) {
       await VoucherModel.updateOne(
-        { _id: voucher._id },
+        { _id: totals.voucher._id },
         {
           $inc: { usedCount: 1 },
           $addToSet: {

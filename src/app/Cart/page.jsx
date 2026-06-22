@@ -853,7 +853,7 @@ export default function CartPage() {
                       PAYMENT TYPE
                     </p>
                     <div className="flex gap-6">
-                      {["COD", "UPI"].map((type) => (
+                      {["UPI"].map((type) => (
                         <label key={type} className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="radio"
@@ -864,7 +864,7 @@ export default function CartPage() {
                             className="accent-black"
                           />
                           <span className="text-[0.78rem] font-light text-[#2B2B2B] tracking-wide">
-                            {type === "COD" ? "Cash on Delivery" : "UPI"}
+                            UPI
                           </span>
                         </label>
                       ))}

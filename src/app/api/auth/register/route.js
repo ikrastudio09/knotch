@@ -17,19 +17,21 @@ export async function POST(req) {
     );
   }
 
-  const existing = await User.findOne({ userEmail });
-  if (existing)
-    return NextResponse.json(
-      { message: "Email is already registered, " },
-      { status: 400 },
-    );
-
-  const existingPhone = await User.findOne({ userNumber });
-  if (existingPhone)
-    return NextResponse.json(
-      { message: "Mobile numbeer is already registered, " },
-      { status: 400 },
-    );
+  if (userEmail) {
+    const existing = await User.findOne({ userEmail });
+    if (existing)
+      return NextResponse.json(
+        { message: "Email is already registered, " },
+        { status: 400 },
+      );
+  } else {
+    const existingPhone = await User.findOne({ userNumber });
+    if (existingPhone)
+      return NextResponse.json(
+        { message: "Mobile numbeer is already registered, " },
+        { status: 400 },
+      );
+  }
 
   const hashed = await bcrypt.hash(userPassword, 10);
   await User.create({

@@ -203,14 +203,14 @@ export default function Footer() {
                 >
                   <Instagram size={20} />
                 </Link>
-                <Link
+                {/* <Link
                   href="https://facebook.com/isabella"
                   target="_blank"
                   className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
                   aria-label="Facebook"
                 >
                   <Facebook size={20} />
-                </Link>
+                </Link> */}
                 {/* <Link
                   href="https://twitter.com/isabella"
                   target="_blank"
@@ -220,7 +220,7 @@ export default function Footer() {
                   <Twitter size={20} />
                 </Link> */}
                 <Link
-                  href="https://wa.me/8983985787"
+                  href="https://wa.me/918983985787"
                   target="_blank"
                   className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors"
                   aria-label="WhatsApp"

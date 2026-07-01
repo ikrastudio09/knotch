@@ -113,6 +113,7 @@ export default function NewSeasonPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [selectedSort, setSelectedSort] = useState("Featured");
+  const [restored, setRestored] = useState(false);
 
   const sortOptions = [
     "Featured",
@@ -171,16 +172,59 @@ export default function NewSeasonPage() {
   }, []);
 
   useEffect(() => {
+    const saved = sessionStorage.getItem("productListing");
+
+    if (!saved) {
+      setRestored(true);
+      return;
+    }
+
+    const data = JSON.parse(saved);
+
+    setFilters(data.filters);
+    setSelectedSort(data.selectedSort);
+    setSelectedView(data.selectedView);
+    setProducts(data.products);
+    setPage(data.page);
+    setHasMore(data.hasMore);
+
+    setRestored(true);
+
+    // requestAnimationFrame(() => {
+    //   window.scrollTo({
+    //     top: data.scrollY || 0,
+    //     behavior: "instant",
+    //   });
+    // });
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
+
+    const saved = sessionStorage.getItem("productListing");
+
+    if (saved) {
+      sessionStorage.removeItem("productListing");
+      return;
+    }
+
     setProducts([]);
     setPage(1);
     fetchProducts(1, true);
-  }, [filters, selectedSort]);
+  }, [filters, selectedSort, restored]);
 
   useEffect(() => {
+    if (!restored) return;
+
     if (page > 1) {
       fetchProducts(page);
     }
-  }, [page]);
+  }, [page, restored]);
+
+  const activeFilters =
+    filters.categories.length +
+    filters.size.length +
+    (filters.priceRange[1] !== 2000 ? 1 : 0);
 
   const toggleFilter = (filterType, value) => {
     setFilters((prev) => ({
@@ -205,7 +249,9 @@ export default function NewSeasonPage() {
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
                   className="flex items-center gap-2 px-4 py-2 text-sm border border-[#BFC3C7] text-black hover:bg-gray-50 transition tracking-widest font-nunito"
                 >
-                  <span>FILTER</span>
+                  <span>
+                    FILTER {activeFilters > 0 && `(${activeFilters})`}
+                  </span>
                   <ChevronDown
                     size={16}
                     className={`transition-transform duration-200 ${isFilterOpen ? "rotate-180" : ""}`}
@@ -354,7 +400,8 @@ export default function NewSeasonPage() {
                 </div>
 
                 {/* Clear Filters */}
-                <div className="mt-6 pt-6 border-t border-[#BFC3C7] flex justify-end">
+                {/* Filter Actions */}
+                <div className="mt-6 pt-6 border-t border-[#BFC3C7] flex justify-between items-center">
                   <button
                     onClick={() =>
                       setFilters({
@@ -363,9 +410,16 @@ export default function NewSeasonPage() {
                         size: [],
                       })
                     }
-                    className="text-sm font-light text-[#2B2B2B] underline hover:no-underline bg-none border-none cursor-pointer"
+                    className="text-sm font-light text-[#2B2B2B] underline hover:no-underline"
                   >
                     Clear All Filters
+                  </button>
+
+                  <button
+                    onClick={() => setIsFilterOpen(false)}
+                    className="px-6 py-2 bg-black text-white text-sm tracking-wider hover:bg-neutral-800 transition"
+                  >
+                    Apply Filters
                   </button>
                 </div>
               </div>
@@ -387,7 +441,22 @@ export default function NewSeasonPage() {
                 <ProductCard
                   key={product._id}
                   product={product}
-                  onClick={() => router.push(`/products/${product.slug}`)}
+                  onClick={() => {
+                    sessionStorage.setItem(
+                      "productListing",
+                      JSON.stringify({
+                        filters,
+                        selectedSort,
+                        selectedView,
+                        page,
+                        products,
+                        hasMore,
+                        // scrollY: window.scrollY,
+                      }),
+                    );
+
+                    router.push(`/products/${product.slug}`);
+                  }}
                 />
               ))}
             </div>

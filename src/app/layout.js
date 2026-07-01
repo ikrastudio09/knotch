@@ -3,6 +3,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,6 +81,9 @@ export default function RootLayout({ children }) {
             {children}
           </GoogleOAuthProvider>
         </CartProvider>
+
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
